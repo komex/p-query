@@ -1,0 +1,33 @@
+{
+  "name": "komex/p-query",
+  "description": "Works with PHP files like jQuery with DOM",
+  "minimum-stability": "stable",
+  "license": "CC-BY-SA-4.0",
+  "authors": [
+    {
+      "name": "Andrey Kolchenko",
+      "email": "andrey@kolchenko.me"
+    }
+  ],
+  "support": {
+    "email": "andrey@kolchenko.me",
+    "issues": "https://github.com/komex/p-query/issues",
+    "source": "https://github.com/komex/p-query.git"
+  },
+  "require": {
+    "php": ">=5.4",
+    "ext-SPL": "*",
+    "ext-tokenizer": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.3.1",
+    "squizlabs/php_codesniffer": "1.5.*",
+    "phpmd/phpmd" : "@stable"
+  },
+  "autoload": {
+    "psr-4": {
+      "PQuery\\": "src/",
+      "Test\\PQuery\\": "tests/"
+    }
+  }
+}
