@@ -41,10 +41,6 @@ class Document
     {
         $parser = new Parser($stream);
         $this->elements = $parser->getElements();
-        $lang = new ExpressionLanguage();
-        $lang->registerProvider(new ExpressionProvider());
-        $b = $lang->compile('ns([a, b, c])', ['a', 'b', 'c']);
-        $a = $lang->evaluate('ns(collection, collection)', ['collection' => $this->elements]);
         $this->stream = $stream;
     }
 

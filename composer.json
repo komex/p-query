@@ -17,8 +17,7 @@
     "require": {
         "php": ">=5.4",
         "ext-SPL": "*",
-        "ext-tokenizer": "*",
-        "symfony/expression-language": "~2.6.1"
+        "ext-tokenizer": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.3.1",
