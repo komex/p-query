@@ -38,28 +38,11 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         $document = new Document(self::$stream);
         $namespaces = $document->getNamespaces();
         $this->assertCount(1, $namespaces);
-        $this->assertSame(__NAMESPACE__, $namespaces[0]['name']);
-    }
-
-    /**
-     *
-     */
-    public function testClasses()
-    {
-        $document = new Document(self::$stream);
-        $classes = $document->getClasses();
-        $this->assertCount(1, $classes);
-        $this->assertSame(__NAMESPACE__, $classes[0]['namespace']);
-        $this->assertSame(__CLASS__, $classes[0]['namespace'] . '\\' . $classes[0]['name']);
-    }
-
-    /**
-     *
-     */
-    public function testMethods()
-    {
-        $document = new Document(self::$stream);
-        $methods = $document->getMethods();
-        $this->assertCount(4, $methods);
+        function someF()
+        {
+            return 'aa';
+        }
+        echo someF();
+//        $this->assertSame(__NAMESPACE__, $namespaces[0]->getName());
     }
 }
