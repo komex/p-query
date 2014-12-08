@@ -112,7 +112,10 @@ class Parser
     {
         $element->setLevel($this->treeLevel);
         if ($this->layoutTree->isEmpty() === false) {
-            $element->setParentElement($this->layoutTree->top());
+            /** @var AbstractElement $parent */
+            $parent = $this->layoutTree->top();
+            $element->setParentElement($parent);
+            $parent->addChild($element);
         }
         array_push($this->elements, $element);
         $this->layoutTree->push($element);

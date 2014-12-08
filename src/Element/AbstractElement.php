@@ -35,6 +35,26 @@ abstract class AbstractElement
      * @var int
      */
     protected $finish;
+    /**
+     * @var AbstractElement[]
+     */
+    protected $children = [];
+
+    /**
+     * @param AbstractElement $element
+     */
+    public function addChild(AbstractElement $element)
+    {
+        array_push($this->children, $element);
+    }
+
+    /**
+     * @return AbstractElement[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
 
     /**
      * @return string
