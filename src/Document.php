@@ -7,15 +7,12 @@
 
 namespace PQuery;
 
+use PQuery\Collection\ClassCollection;
+use PQuery\Collection\FunctionCollection;
 use PQuery\Collection\NamespaceCollection;
-use PQuery\Element\AbstractElement;
 use PQuery\Element\ClassElement;
 use PQuery\Element\FunctionElement;
 use PQuery\Element\NamespaceElement;
-use PQuery\Filter\NamespaceFilter;
-use PQuery\Provider\ExpressionProvider;
-use Symfony\Component\DependencyInjection\ExpressionLanguage;
-use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Class Document
@@ -30,7 +27,7 @@ class Document
      */
     private $stream;
     /**
-     * @var AbstractElement[]|\ArrayIterator
+     * @var \ArrayIterator
      */
     private $elements;
 
@@ -45,42 +42,26 @@ class Document
     }
 
     /**
-     * @param string|null $mask
-     *
-     * @return NamespaceCollection
+     * @return NamespaceCollection|NamespaceElement[]
      */
-    public function getNamespaces($mask = null)
+    public function getNamespaces()
     {
-        return new NamespaceCollection(new NamespaceFilter($this->elements, $mask));
+        return new NamespaceCollection($this->elements);
     }
 
     /**
-     * @return ClassElement[]
+     * @return ClassCollection|ClassElement[]
      */
     public function getClasses()
     {
-        return array_values(
-            array_filter(
-                $this->elements,
-                function (AbstractElement $element) {
-                    return ($element instanceof ClassElement);
-                }
-            )
-        );
+        return new ClassCollection($this->elements);
     }
 
     /**
-     * @return FunctionElement[]
+     * @return FunctionCollection|FunctionElement[]
      */
-    public function getMethods()
+    public function getFunctions()
     {
-        return array_values(
-            array_filter(
-                $this->elements,
-                function (AbstractElement $element) {
-                    return ($element instanceof FunctionElement);
-                }
-            )
-        );
+        return new FunctionCollection($this->elements);
     }
 }

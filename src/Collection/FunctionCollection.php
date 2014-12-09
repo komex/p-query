@@ -7,21 +7,21 @@
 
 namespace PQuery\Collection;
 
-use PQuery\Filter\Type\NamespaceTypeFilter;
+use PQuery\Filter\Type\FunctionTypeFilter;
 
 /**
- * Class NamespaceCollection
+ * Class FunctionCollection
  *
  * @package PQuery\Collection
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class NamespaceCollection extends AbstractCollection
+class FunctionCollection extends AbstractCollection
 {
     /**
      * @param \ArrayIterator $elements
      */
     public function __construct(\ArrayIterator $elements)
     {
-        $this->elements = new NamespaceTypeFilter($elements);
+        $this->elements = new FunctionTypeFilter($elements);
     }
 }
