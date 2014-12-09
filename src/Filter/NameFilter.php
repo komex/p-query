@@ -7,29 +7,35 @@
 
 namespace PQuery\Filter;
 
-use PQuery\Element\NamespaceElement;
+use PQuery\Element\AbstractElement;
 
 /**
- * Class NamespaceFilter
+ * Class NameFilter
  *
  * @package PQuery\Filter
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class NamespaceFilter extends \FilterIterator
+class NameFilter extends \FilterIterator
 {
     /**
      * @var string
      */
-    private $mask;
+    private $name;
+    /**
+     * @var bool
+     */
+    private $caseLess;
 
     /**
      * @param \Iterator $iterator
-     * @param string|null $mask
+     * @param string $name
+     * @param bool $caseLess
      */
-    public function __construct(\Iterator $iterator, $mask)
+    public function __construct(\Iterator $iterator, $name, $caseLess)
     {
         parent::__construct($iterator);
-        $this->mask = $mask;
+        $this->name = (string)$name;
+        $this->caseLess = (bool)$caseLess;
     }
 
     /**
@@ -41,24 +47,15 @@ class NamespaceFilter extends \FilterIterator
     public function accept()
     {
         $element = $this->getInnerIterator()->current();
-        if ($element instanceof NamespaceElement) {
-            if ($this->mask === null) {
-                return true;
-            } else {
-                return $this->testName($element);
+        if ($element instanceof AbstractElement) {
+            $pattern = '/' . $this->name . '/';
+            if ($this->caseLess === true) {
+                $pattern .= 'i';
             }
+
+            return (preg_match($pattern, $element->getName()) === 1);
         } else {
             return false;
         }
-    }
-
-    /**
-     * @param NamespaceElement $namespace
-     *
-     * @return bool
-     */
-    private function testName(NamespaceElement $namespace)
-    {
-        return preg_match('/' . $this->mask . '/', $namespace->getName()) === 1;
     }
 }
