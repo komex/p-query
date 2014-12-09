@@ -31,18 +31,28 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test count of PHP places.
+     * Test namespaces
      */
     public function testNamespaces()
     {
         $document = new Document(self::$stream);
         $namespaces = $document->getNamespaces();
         $this->assertCount(1, $namespaces);
-        function someF()
-        {
-            return 'aa';
+        foreach ($namespaces as $namespace) {
+            $this->assertSame(__NAMESPACE__, $namespace->getName());
         }
-        echo someF();
-//        $this->assertSame(__NAMESPACE__, $namespaces[0]->getName());
+    }
+
+    /**
+     * Test classes
+     */
+    public function testClasses()
+    {
+        $document = new Document(self::$stream);
+        $classes = $document->getClasses();
+        $this->assertCount(1, $classes);
+        foreach ($classes as $class) {
+            $this->assertSame(__CLASS__, $class->getParentElement()->getName() . '\\' . $class->getName());
+        }
     }
 }

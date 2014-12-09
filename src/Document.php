@@ -37,7 +37,7 @@ class Document
     public function __construct(\ArrayIterator $stream)
     {
         $parser = new Parser($stream);
-        $this->elements = $parser->getElements();
+        $this->elements = $parser->getIterator();
         $this->stream = $stream;
     }
 

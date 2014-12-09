@@ -18,7 +18,7 @@ use PQuery\Element\NamespaceElement;
  * @package PQuery
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class Parser
+class Parser implements \IteratorAggregate
 {
     /**
      * @var AbstractElement[]
@@ -56,9 +56,12 @@ class Parser
     }
 
     /**
+     * Retrieve an external iterator
+     *
+     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
      * @return AbstractElement[]|\ArrayIterator
      */
-    public function getElements()
+    public function getIterator()
     {
         return new \ArrayIterator($this->elements);
     }

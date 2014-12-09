@@ -15,7 +15,7 @@ use PQuery\Filter\NameFilter;
  * @package PQuery\Collection
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-abstract class AbstractCollection implements \IteratorAggregate
+abstract class AbstractCollection implements \IteratorAggregate, \Countable
 {
     /**
      * @var \ArrayIterator
@@ -46,5 +46,23 @@ abstract class AbstractCollection implements \IteratorAggregate
     public function getIterator()
     {
         return $this->elements;
+    }
+
+    /**
+     * Count elements of an object
+     *
+     * @link http://php.net/manual/en/countable.count.php
+     * @return int
+     */
+    public function count()
+    {
+        $count = 0;
+        $this->elements->rewind();
+        while ($this->elements->valid()) {
+            $count++;
+            $this->elements->next();
+        }
+
+        return $count;
     }
 }
