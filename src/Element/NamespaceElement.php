@@ -15,15 +15,5 @@ namespace PQuery\Element;
  */
 class NamespaceElement extends AbstractElement
 {
-    /**
-     * @param \ArrayIterator $stream
-     */
-    public function __construct(\ArrayIterator $stream)
-    {
-        assert('$this->getToken($stream->current())[0] === T_NAMESPACE');
-        $position = $stream->key();
-        $stream->seek($position + 2);
-        $this->name = $this->extractName($stream);
-        $this->position = $position;
-    }
+
 }
