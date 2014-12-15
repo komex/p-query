@@ -28,21 +28,36 @@ class FunctionElement extends AbstractElement
      */
     private $visibility;
     /**
-     * @var bool
+     * @var string
      */
-    private $attrLoaded = false;
+    private $content;
+
+    /**
+     * @param \ArrayIterator $stream
+     */
+    public function __construct(\ArrayIterator $stream)
+    {
+        $this->stream = $stream;
+        $this->position = $stream->key();
+        $this->loadAttributes();
+        $this->loadName();
+        $this->loadContent();
+    }
 
     /**
      * @return string
      */
     public function getName()
     {
-        if ($this->name === null) {
-            $this->stream->seek($this->position + 2);
-            $this->name = $this->extractName($this->stream);
-        }
-
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 
     /**
@@ -50,7 +65,7 @@ class FunctionElement extends AbstractElement
      */
     public function isStatic()
     {
-        return $this->loadAttributes()->attribute === T_STATIC;
+        return $this->attribute === T_STATIC;
     }
 
     /**
@@ -58,7 +73,7 @@ class FunctionElement extends AbstractElement
      */
     public function isAbstract()
     {
-        return $this->loadAttributes()->attribute === T_ABSTRACT;
+        return $this->attribute === T_ABSTRACT;
     }
 
     /**
@@ -66,7 +81,7 @@ class FunctionElement extends AbstractElement
      */
     public function isPublic()
     {
-        return $this->loadAttributes()->visibility === T_PUBLIC;
+        return $this->visibility === T_PUBLIC;
     }
 
     /**
@@ -74,7 +89,7 @@ class FunctionElement extends AbstractElement
      */
     public function isProtected()
     {
-        return $this->loadAttributes()->visibility === T_PROTECTED;
+        return $this->visibility === T_PROTECTED;
     }
 
     /**
@@ -82,39 +97,63 @@ class FunctionElement extends AbstractElement
      */
     public function isPrivate()
     {
-        return $this->loadAttributes()->visibility === T_PRIVATE;
+        return $this->visibility === T_PRIVATE;
     }
 
     /**
-     * @return $this
+     * Load content of function.
+     */
+    private function loadContent()
+    {
+        $content = '';
+        $this->stream->seek($this->position + 1);
+        $isBracketOpen = false;
+        while ($this->stream->valid() && $this->stream->key() < $this->finish) {
+            list(, $value) = $this->getToken($this->stream->current());
+            if ($isBracketOpen === true) {
+                $content .= $value;
+            } elseif ($value === '{') {
+                $isBracketOpen = true;
+            }
+            $this->stream->next();
+        }
+        $this->content = $content;
+    }
+
+    /**
+     * Load name of function.
+     */
+    private function loadName()
+    {
+        $this->stream->seek($this->position + 2);
+        $this->name = $this->extractName($this->stream);
+    }
+
+    /**
+     * Load attributes of function.
      */
     private function loadAttributes()
     {
-        if ($this->attrLoaded === false) {
-            $offset = ($this->position - 1);
-            $this->stream->seek($offset);
-            while ($this->stream->valid()) {
-                list($code) = $this->getToken($this->stream->current());
-                switch ($code) {
-                    case T_PUBLIC:
-                    case T_PROTECTED:
-                    case T_PRIVATE:
-                        $this->visibility = $code;
-                        break;
-                    case T_STATIC:
-                    case T_ABSTRACT:
-                        $this->attribute = $code;
-                        break;
-                    case T_WHITESPACE:
-                        break;
-                    default:
-                        break 2;
-                }
-                $this->stream->seek(--$offset);
+        $offset = ($this->position - 1);
+        $this->stream->seek($offset);
+        while ($this->stream->valid()) {
+            list($code) = $this->getToken($this->stream->current());
+            switch ($code) {
+                case T_PUBLIC:
+                case T_PROTECTED:
+                case T_PRIVATE:
+                    $this->visibility = $code;
+                    break;
+                case T_STATIC:
+                case T_ABSTRACT:
+                    $this->attribute = $code;
+                    break;
+                case T_WHITESPACE:
+                    break;
+                default:
+                    break 2;
             }
-            $this->attrLoaded = true;
+            $this->stream->seek(--$offset);
         }
-
-        return $this;
     }
 }

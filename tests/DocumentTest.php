@@ -40,6 +40,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         foreach ($functions as $function) {
             $this->assertTrue($function->isPublic());
             $this->assertFalse($function->isAbstract());
+            $function->getContent();
         }
     }
 

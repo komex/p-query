@@ -41,15 +41,6 @@ abstract class AbstractElement
     protected $children = [];
 
     /**
-     * @param \ArrayIterator $stream
-     */
-    public function __construct(\ArrayIterator $stream)
-    {
-        $this->stream = $stream;
-        $this->position = $stream->key();
-    }
-
-    /**
      * @return AbstractElement
      */
     public function getParentElement()

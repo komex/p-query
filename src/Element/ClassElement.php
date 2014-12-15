@@ -23,21 +23,23 @@ class ClassElement extends AbstractElement
      * @var int
      */
     private $attribute;
+
     /**
-     * @var bool
+     * @param \ArrayIterator $stream
      */
-    private $attrLoaded = false;
+    public function __construct(\ArrayIterator $stream)
+    {
+        $this->stream = $stream;
+        $this->position = $stream->key();
+        $this->loadAttributes();
+        $this->loadName();
+    }
 
     /**
      * @return string
      */
     public function getName()
     {
-        if ($this->name === null) {
-            $this->stream->seek($this->position + 2);
-            $this->name = $this->extractName($this->stream);
-        }
-
         return $this->name;
     }
 
@@ -46,7 +48,7 @@ class ClassElement extends AbstractElement
      */
     public function isAbstract()
     {
-        return $this->loadAttributes()->attribute === T_ABSTRACT;
+        return $this->attribute === T_ABSTRACT;
     }
 
     /**
@@ -54,7 +56,16 @@ class ClassElement extends AbstractElement
      */
     public function isFinal()
     {
-        return $this->loadAttributes()->attribute === T_FINAL;
+        return $this->attribute === T_FINAL;
+    }
+
+    /**
+     * Load name of function.
+     */
+    private function loadName()
+    {
+        $this->stream->seek($this->position + 2);
+        $this->name = $this->extractName($this->stream);
     }
 
     /**
@@ -62,21 +73,16 @@ class ClassElement extends AbstractElement
      */
     private function loadAttributes()
     {
-        if ($this->attrLoaded === false) {
-            $offset = ($this->position - 1);
-            $this->stream->seek($offset);
-            while ($this->stream->valid()) {
-                list($code) = $this->getToken($this->stream->current());
-                if ($code === T_ABSTRACT || $code === T_FINAL) {
-                    $this->attribute = $code;
-                } elseif ($code !== T_WHITESPACE) {
-                    break;
-                }
-                $this->stream->seek(--$offset);
+        $offset = ($this->position - 1);
+        $this->stream->seek($offset);
+        while ($this->stream->valid()) {
+            list($code) = $this->getToken($this->stream->current());
+            if ($code === T_ABSTRACT || $code === T_FINAL) {
+                $this->attribute = $code;
+            } elseif ($code !== T_WHITESPACE) {
+                break;
             }
-            $this->attrLoaded = true;
+            $this->stream->seek(--$offset);
         }
-
-        return $this;
     }
 }
