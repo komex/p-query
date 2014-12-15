@@ -16,9 +16,9 @@ namespace PQuery\Element;
 abstract class AbstractElement
 {
     /**
-     * @var string
+     * @var \ArrayIterator
      */
-    protected $name;
+    protected $stream;
     /**
      * @var int
      */
@@ -41,11 +41,28 @@ abstract class AbstractElement
     protected $children = [];
 
     /**
-     * @param AbstractElement $element
+     * @param \ArrayIterator $stream
      */
-    public function addChild(AbstractElement $element)
+    public function __construct(\ArrayIterator $stream)
     {
-        array_push($this->children, $element);
+        $this->stream = $stream;
+        $this->position = $stream->key();
+    }
+
+    /**
+     * @return AbstractElement
+     */
+    public function getParentElement()
+    {
+        return $this->parentElement;
+    }
+
+    /**
+     * @param AbstractElement $parentElement
+     */
+    public function setParentElement(AbstractElement $parentElement = null)
+    {
+        $this->parentElement = $parentElement;
     }
 
     /**
@@ -57,11 +74,11 @@ abstract class AbstractElement
     }
 
     /**
-     * @return string
+     * @param AbstractElement $element
      */
-    public function getName()
+    public function addChild(AbstractElement $element)
     {
-        return $this->name;
+        array_push($this->children, $element);
     }
 
     /**
@@ -102,22 +119,6 @@ abstract class AbstractElement
     public function setFinish($finish)
     {
         $this->finish = $finish;
-    }
-
-    /**
-     * @return AbstractElement
-     */
-    public function getParentElement()
-    {
-        return $this->parentElement;
-    }
-
-    /**
-     * @param AbstractElement $parentElement
-     */
-    public function setParentElement(AbstractElement $parentElement = null)
-    {
-        $this->parentElement = $parentElement;
     }
 
     /**

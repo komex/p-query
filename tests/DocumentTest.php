@@ -33,26 +33,13 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     /**
      * Test namespaces
      */
-    public function testNamespaces()
+    public function testFunctions()
     {
         $document = new Document(self::$stream);
-        $namespaces = $document->getNamespaces();
-        $this->assertCount(1, $namespaces);
-        foreach ($namespaces as $namespace) {
-            $this->assertSame(__NAMESPACE__, $namespace->getName());
-        }
-    }
-
-    /**
-     * Test classes
-     */
-    public function testClasses()
-    {
-        $document = new Document(self::$stream);
-        $classes = $document->getClasses();
-        $this->assertCount(1, $classes);
-        foreach ($classes as $class) {
-            $this->assertSame(__CLASS__, $class->getParentElement()->getName() . '\\' . $class->getName());
+        $functions = $document->getFunctions();
+        foreach ($functions as $function) {
+            $this->assertTrue($function->isPublic());
+            $this->assertFalse($function->isAbstract());
         }
     }
 }
