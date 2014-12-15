@@ -16,14 +16,67 @@ namespace PQuery\Element;
 class ClassElement extends AbstractElement
 {
     /**
-     * @param \ArrayIterator $stream
+     * @var string
      */
-    public function __construct(\ArrayIterator $stream)
+    private $name;
+    /**
+     * @var int
+     */
+    private $attribute;
+    /**
+     * @var bool
+     */
+    private $attrLoaded = false;
+
+    /**
+     * @return string
+     */
+    public function getName()
     {
-        assert('$this->getToken($stream->current())[0] === T_CLASS');
-        $position = $stream->key();
-        $stream->seek($position + 2);
-        $this->name = $this->extractName($stream);
-        $this->position = $position;
+        if ($this->name === null) {
+            $this->stream->seek($this->position + 2);
+            $this->name = $this->extractName($this->stream);
+        }
+
+        return $this->name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAbstract()
+    {
+        return $this->loadAttributes()->attribute === T_ABSTRACT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinal()
+    {
+        return $this->loadAttributes()->attribute === T_FINAL;
+    }
+
+    /**
+     * @return $this
+     */
+    private function loadAttributes()
+    {
+        if ($this->attrLoaded === false) {
+            $offset = ($this->position - 1);
+            $this->stream->seek($offset);
+            while ($this->stream->valid()) {
+                list($code) = $this->getToken($this->stream->current());
+                if ($code === T_ABSTRACT || $code === T_FINAL) {
+                    $this->attribute = $code;
+                } elseif ($code !== T_WHITESPACE) {
+                    break;
+                }
+                $this->stream->seek(--$offset);
+            }
+            $this->attrLoaded = true;
+        }
+
+        return $this;
     }
 }

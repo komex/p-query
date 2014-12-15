@@ -91,8 +91,6 @@ class FunctionElement extends AbstractElement
     private function loadAttributes()
     {
         if ($this->attrLoaded === false) {
-            $this->static = false;
-            $this->abstract = false;
             $offset = ($this->position - 1);
             $this->stream->seek($offset);
             while ($this->stream->valid()) {
