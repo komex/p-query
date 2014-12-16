@@ -8,10 +8,7 @@
 namespace PQuery\Parser;
 
 use PQuery\Block\AbstractBlock;
-use PQuery\Block\ClassBlock;
-use PQuery\Block\FunctionBlock;
 use PQuery\Block\NamespaceBlock;
-use PQuery\Element\AbstractElement;
 
 /**
  * Class Parser
@@ -22,7 +19,7 @@ use PQuery\Element\AbstractElement;
 class Parser implements \IteratorAggregate
 {
     /**
-     * @var AbstractElement[]
+     * @var AbstractBlock[]
      */
     private $elements = [];
     /**
@@ -41,12 +38,27 @@ class Parser implements \IteratorAggregate
      * @var NamespaceBlock
      */
     private $currentNamespace;
+    /**
+     * @var AbstractBlockParser
+     */
+    private $namespaceBlockParser;
+    /**
+     * @var AbstractBlockParser
+     */
+    private $classBlockParser;
+    /**
+     * @var AbstractBlockParser
+     */
+    private $functionBlockParser;
 
     /**
      * @param \ArrayIterator $stream
      */
     public function __construct(\ArrayIterator $stream)
     {
+        $this->namespaceBlockParser = new NamespaceBlockParser();
+        $this->classBlockParser = new ClassBlockParser();
+        $this->functionBlockParser = new FunctionBlockParser();
         $stream->rewind();
         $this->layoutTree = new \SplStack;
         while ($stream->valid() === true) {
@@ -65,7 +77,7 @@ class Parser implements \IteratorAggregate
      * Retrieve an external iterator
      *
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     * @return AbstractElement[]|\ArrayIterator
+     * @return AbstractBlock[]|\ArrayIterator
      */
     public function getIterator()
     {
@@ -96,10 +108,7 @@ class Parser implements \IteratorAggregate
      */
     private function registerFunction(\ArrayIterator $stream)
     {
-        $block = new FunctionBlock();
-        $position = $stream->key();
-        $block->setPosition($position);
-        $block->setStart($position);
+        $block = $this->functionBlockParser->extract($stream);
         $this->registerBlockFinishListener($block);
         $this->registerBlock($block);
     }
@@ -109,11 +118,7 @@ class Parser implements \IteratorAggregate
      */
     private function registerClass(\ArrayIterator $stream)
     {
-        $position = $stream->key();
-        $stream->next();
-        $block = new ClassBlock($this->extractName($stream));
-        $block->setPosition($position);
-        $block->setStart($position);
+        $block = $this->classBlockParser->extract($stream);
         $this->registerBlockFinishListener($block);
         $this->registerBlock($block);
     }
@@ -123,23 +128,13 @@ class Parser implements \IteratorAggregate
      */
     private function registerNamespaceBlock(\ArrayIterator $stream)
     {
-        $position = $stream->key();
-        $stream->next();
-        $block = new NamespaceBlock($this->extractName($stream));
-        $block->setPosition($position);
-        $block->setStart($position);
-        while ($stream->valid() === true) {
-            if ($stream->current() === ';') {
-                break;
-            } elseif ($stream->current() === '{') {
-                $this->registerBlockFinishListener($block);
-                $this->levelControl($stream->key(), $stream->current());
-                break;
-            }
-            $stream->next();
+        $block = $this->namespaceBlockParser->extract($stream);
+        if ($block->isLimited() === true) {
+            $this->registerBlockFinishListener($block);
+            $this->levelControl($stream->key(), $stream->current());
         }
         if ($this->currentNamespace !== null) {
-            $this->currentNamespace->setFinish($position);
+            $this->currentNamespace->setFinish($block->getPosition());
         }
         $this->currentNamespace = $block;
         $this->registerBlock($block);
@@ -177,44 +172,6 @@ class Parser implements \IteratorAggregate
     private function registerBlockFinishListener(AbstractBlock $block)
     {
         $this->levelListeners[$this->treeLevel] = $block;
-    }
-
-    /**
-     * @param \ArrayIterator $stream
-     *
-     * @return string
-     */
-    private function extractName(\ArrayIterator $stream)
-    {
-        $name = '';
-        while ($stream->valid() === true) {
-            list($code, $value) = $this->getToken($stream->current());
-            if ($code === T_STRING || $code === T_NS_SEPARATOR) {
-                $name .= $value;
-            } elseif ($code !== T_WHITESPACE) {
-                break;
-            }
-            $stream->next();
-        }
-
-        return $name;
-    }
-
-    /**
-     * @param array|string $token
-     *
-     * @return array
-     */
-    private function getToken($token)
-    {
-        if (is_array($token) === true) {
-            list($code, $value) = $token;
-        } else {
-            $code = null;
-            $value = $token;
-        }
-
-        return [$code, $value];
     }
 
     /**
