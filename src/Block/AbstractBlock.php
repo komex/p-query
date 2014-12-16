@@ -39,6 +39,10 @@ abstract class AbstractBlock
      * @var AbstractBlock[]
      */
     private $children = [];
+    /**
+     * @var string
+     */
+    private $docBlock;
 
     /**
      * @return int
@@ -134,5 +138,21 @@ abstract class AbstractBlock
     public function addChildren(AbstractBlock $children)
     {
         array_push($this->children, $children);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocBlock()
+    {
+        return $this->docBlock;
+    }
+
+    /**
+     * @param string $docBlock
+     */
+    public function setDocBlock($docBlock)
+    {
+        $this->docBlock = $docBlock;
     }
 }

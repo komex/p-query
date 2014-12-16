@@ -24,11 +24,29 @@ class ClassBlockParser extends AbstractBlockParser
      */
     public function extract(Stream $stream)
     {
-        $position = $stream->key();
-        $stream->next();
-        $block = new ClassBlock($this->extractName($stream));
-        $block->setPosition($position);
-        $block->setStart($position);
+        $block = new ClassBlock(null);
+        $block->setPosition($stream->key());
+        $block->setStart($stream->key());
+        $stream->prev();
+        while ($stream->valid() === true) {
+            list($code, $value) = $stream->current();
+            if ($code === T_ABSTRACT) {
+                $block->setAbstract();
+                $block->setStart($stream->key());
+            } elseif ($code === T_FINAL) {
+                $block->setFinal();
+                $block->setStart($stream->key());
+            } elseif ($code === T_DOC_COMMENT) {
+                $block->setDocBlock($value);
+                $block->setStart($stream->key());
+                break;
+            } elseif ($code !== T_WHITESPACE) {
+                break;
+            }
+            $stream->prev();
+        }
+        $stream->seek($block->getPosition() + 1);
+        $block->setName($this->extractName($stream));
 
         return $block;
     }
