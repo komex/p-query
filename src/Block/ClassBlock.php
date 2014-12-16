@@ -45,21 +45,25 @@ class ClassBlock extends AbstractBlock
     }
 
     /**
+     * @param bool $abstract
+     *
      * @return $this
      */
-    public function setAbstract()
+    public function setAbstract($abstract = true)
     {
-        $this->attributes = T_ABSTRACT;
+        $this->attributes = ($abstract ? T_ABSTRACT : null);
 
         return $this;
     }
 
     /**
+     * @param bool $final
+     *
      * @return $this
      */
-    public function setFinal()
+    public function setFinal($final = true)
     {
-        $this->attributes = T_FINAL;
+        $this->attributes = ($final ? T_FINAL : null);
 
         return $this;
     }
