@@ -13,6 +13,7 @@ use PQuery\Collection\NamespaceCollection;
 use PQuery\Element\ClassElement;
 use PQuery\Element\FunctionElement;
 use PQuery\Element\NamespaceElement;
+use PQuery\Parser\Parser;
 
 /**
  * Class Document
