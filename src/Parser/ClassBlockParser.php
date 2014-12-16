@@ -18,11 +18,11 @@ use PQuery\Block\ClassBlock;
 class ClassBlockParser extends AbstractBlockParser
 {
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      *
      * @return ClassBlock
      */
-    public function extract(\ArrayIterator $stream)
+    public function extract(Stream $stream)
     {
         $position = $stream->key();
         $stream->next();

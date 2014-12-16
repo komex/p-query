@@ -52,9 +52,9 @@ class Parser implements \IteratorAggregate
     private $functionBlockParser;
 
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      */
-    public function __construct(\ArrayIterator $stream)
+    public function __construct(Stream $stream)
     {
         $this->namespaceBlockParser = new NamespaceBlockParser();
         $this->classBlockParser = new ClassBlockParser();
@@ -62,12 +62,18 @@ class Parser implements \IteratorAggregate
         $stream->rewind();
         $this->layoutTree = new \SplStack;
         while ($stream->valid() === true) {
-            $token = $stream->current();
-            if (is_array($token) === true) {
-                $this->elementsRegister($stream, $token[0]);
+            list($code, $value) = $stream->current();
+            if ($code === null) {
+                $this->levelControl($stream->key(), $value);
             } else {
-                $this->levelControl($stream->key(), $token);
+                $this->elementsRegister($stream, $code);
             }
+//            $token = $stream->current();
+//            if (is_array($token) === true) {
+//                $this->elementsRegister($stream, $token[0]);
+//            } else {
+//                $this->levelControl($stream->key(), $token);
+//            }
             $stream->next();
         }
         $this->currentNamespace->setFinish($stream->count());
@@ -85,10 +91,10 @@ class Parser implements \IteratorAggregate
     }
 
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      * @param int $token
      */
-    private function elementsRegister(\ArrayIterator $stream, $token)
+    private function elementsRegister(Stream $stream, $token)
     {
         switch ($token) {
             case T_FUNCTION:
@@ -104,9 +110,9 @@ class Parser implements \IteratorAggregate
     }
 
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      */
-    private function registerFunction(\ArrayIterator $stream)
+    private function registerFunction(Stream $stream)
     {
         $block = $this->functionBlockParser->extract($stream);
         $this->registerBlockFinishListener($block);
@@ -114,9 +120,9 @@ class Parser implements \IteratorAggregate
     }
 
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      */
-    private function registerClass(\ArrayIterator $stream)
+    private function registerClass(Stream $stream)
     {
         $block = $this->classBlockParser->extract($stream);
         $this->registerBlockFinishListener($block);
@@ -124,9 +130,9 @@ class Parser implements \IteratorAggregate
     }
 
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      */
-    private function registerNamespaceBlock(\ArrayIterator $stream)
+    private function registerNamespaceBlock(Stream $stream)
     {
         $block = $this->namespaceBlockParser->extract($stream);
         if ($block->isLimited() === true) {

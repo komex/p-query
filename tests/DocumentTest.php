@@ -8,6 +8,7 @@
 namespace Test\PQuery;
 
 use PQuery\Document;
+use PQuery\Parser\Stream;
 
 /**
  * Class DocumentTest
@@ -18,7 +19,7 @@ use PQuery\Document;
 class DocumentTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ArrayIterator
+     * @var Stream
      */
     private static $stream;
 
@@ -27,7 +28,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$stream = new \ArrayIterator(token_get_all(file_get_contents(__FILE__)));
+        self::$stream = new Stream(token_get_all(file_get_contents(__FILE__)));
     }
 
     /**

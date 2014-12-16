@@ -18,11 +18,11 @@ use PQuery\Block\FunctionBlock;
 class FunctionBlockParser extends AbstractBlockParser
 {
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      *
      * @return FunctionBlock
      */
-    public function extract(\ArrayIterator $stream)
+    public function extract(Stream $stream)
     {
         $block = new FunctionBlock();
         $position = $stream->key();

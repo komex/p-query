@@ -18,11 +18,11 @@ use PQuery\Block\NamespaceBlock;
 class NamespaceBlockParser extends AbstractBlockParser
 {
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      *
      * @return NamespaceBlock
      */
-    public function extract(\ArrayIterator $stream)
+    public function extract(Stream $stream)
     {
         $position = $stream->key();
         $stream->next();
@@ -30,9 +30,10 @@ class NamespaceBlockParser extends AbstractBlockParser
         $block->setPosition($position);
         $block->setStart($position);
         while ($stream->valid() === true) {
-            if ($stream->current() === ';') {
+            list(, $value) = $stream->current();
+            if ($value === ';') {
                 break;
-            } elseif ($stream->current() === '{') {
+            } elseif ($value === '{') {
                 $block->setLimited(true);
                 break;
             }
