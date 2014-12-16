@@ -51,7 +51,11 @@ class ClassBlock extends AbstractBlock
      */
     public function setAbstract($abstract = true)
     {
-        $this->attributes = ($abstract ? T_ABSTRACT : null);
+        if ($abstract === true) {
+            $this->attributes = T_ABSTRACT;
+        } elseif ($this->attributes === T_ABSTRACT) {
+            $this->attributes = null;
+        }
 
         return $this;
     }

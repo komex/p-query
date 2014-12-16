@@ -16,9 +16,17 @@ namespace PQuery\Block;
 class FunctionBlock extends AbstractBlock
 {
     /**
-     * @var int
+     * @var bool
      */
-    private $attributes;
+    private $static = false;
+    /**
+     * @var bool
+     */
+    private $abstract = false;
+    /**
+     * @var bool
+     */
+    private $final = false;
     /**
      * @var int
      */
@@ -29,15 +37,20 @@ class FunctionBlock extends AbstractBlock
      */
     public function isAbstract()
     {
-        return $this->attributes === T_ABSTRACT;
+        return $this->abstract;
     }
 
     /**
+     * @param bool $abstract
+     *
      * @return $this
      */
-    public function setAbstract()
+    public function setAbstract($abstract = true)
     {
-        $this->attributes = T_ABSTRACT;
+        $this->abstract = $abstract;
+        if ($abstract === true) {
+            $this->final = false;
+        }
 
         return $this;
     }
@@ -47,15 +60,40 @@ class FunctionBlock extends AbstractBlock
      */
     public function isStatic()
     {
-        return $this->attributes === T_STRING;
+        return $this->static;
     }
 
     /**
+     * @param bool $static
+     *
      * @return $this
      */
-    public function setStatic()
+    public function setStatic($static = true)
     {
-        $this->attributes = T_STATIC;
+        $this->static = (bool)$static;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinal()
+    {
+        return $this->final;
+    }
+
+    /**
+     * @param bool $final
+     *
+     * @return $this
+     */
+    public function setFinal($final = true)
+    {
+        $this->final = (bool)$final;
+        if ($this->final === true) {
+            $this->abstract = false;
+        }
 
         return $this;
     }
