@@ -37,21 +37,5 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     public function testFunctions()
     {
         $document = new Document(self::$stream);
-        $functions = $document->getFunctions();
-        foreach ($functions as $function) {
-            $this->assertTrue($function->isPublic());
-            $this->assertFalse($function->isAbstract());
-            $function->getContent();
-        }
-    }
-
-    public function testClass()
-    {
-        $document = new Document(self::$stream);
-        $classes = $document->getClasses();
-        foreach ($classes as $class) {
-            $this->assertFalse($class->isAbstract());
-            $this->assertFalse($class->isFinal());
-        }
     }
 }
