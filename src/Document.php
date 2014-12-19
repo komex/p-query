@@ -11,6 +11,7 @@ use PQuery\Handler\ClassHandler;
 use PQuery\Handler\FunctionHandler;
 use PQuery\Handler\LevelHandler;
 use PQuery\Handler\NamespaceHandler;
+use PQuery\Iterator\ClassIterator;
 use PQuery\Parser\Parser;
 use PQuery\Parser\Stream;
 
@@ -25,19 +26,11 @@ class Document
     /**
      * @var \ArrayIterator
      */
+    private $elements;
+    /**
+     * @var \ArrayIterator
+     */
     private $stream;
-    /**
-     * @var \ArrayIterator
-     */
-    private $namespaces;
-    /**
-     * @var \ArrayIterator
-     */
-    private $classes;
-    /**
-     * @var \ArrayIterator
-     */
-    private $functions;
 
     /**
      * @param Stream $stream
@@ -50,9 +43,18 @@ class Document
         $parser->addSubscriber(new ClassHandler());
         $parser->addSubscriber(new FunctionHandler());
         $parser->parse($stream);
-        $this->namespaces = $parser->getNamespaces();
-        $this->classes = $parser->getClasses();
-        $this->functions = $parser->getFunctions();
+        $this->elements = new \ArrayIterator(
+            [
+                T_NAMESPACE => $parser->getNamespaces(),
+                T_CLASS => $parser->getClasses(),
+                T_FUNCTION => $parser->getFunctions(),
+            ]
+        );
         $this->stream = $stream;
+    }
+
+    public function getClasses()
+    {
+        return new ClassIterator($this->stream, $this->elements);
     }
 }
