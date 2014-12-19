@@ -45,7 +45,17 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
             $this->assertCount(1, $classes);
             foreach ($classes as $class) {
                 $this->assertSame(__CLASS__, $namespace->getName() . '\\' . $class->getName());
-                $this->assertCount(2, $class->getFunctions());
+                $functions = $class->getFunctions();
+                $this->assertCount(2, $functions);
+                foreach ($functions as $function) {
+                    $this->assertSame('setUpBeforeClass', $function->getName());
+                    $this->assertTrue($function->isStatic());
+                    $this->assertTrue($function->isPublic());
+                    $this->assertFalse($function->isProtected());
+                    $this->assertFalse($function->isPrivate());
+                    $this->assertFalse($function->isAbstract());
+                    break;
+                }
             }
         }
     }
