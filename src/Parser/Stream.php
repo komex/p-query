@@ -33,6 +33,15 @@ class Stream implements \SeekableIterator, \Countable
     }
 
     /**
+     * @param int $position
+     * @param int $length
+     */
+    public function remove($position, $length = 1)
+    {
+        array_splice($this->tokens, $position, $length);
+    }
+
+    /**
      * Return the current element
      *
      * @link http://php.net/manual/en/iterator.current.php
