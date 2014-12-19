@@ -29,9 +29,6 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         self::$stream = new Stream(token_get_all(file_get_contents(__FILE__)));
-//        self::$stream = new Stream(
-//            token_get_all(file_get_contents('/home/komex/Projects/communal/app/cache/dev/classes.php'))
-//        );
     }
 
     /**
@@ -40,13 +37,5 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     public function testFunctions()
     {
         $document = new Document(self::$stream);
-        $namespaces = $document->getNamespaces();
-        foreach ($namespaces as $namespace) {
-            foreach ($namespace->classes() as $class) {
-                foreach ($class->functions() as $function) {
-                    $a = $namespace->getName() . '\\' . $class->getName() . '::' . $function->getName() . '()';
-                }
-            }
-        }
     }
 }
