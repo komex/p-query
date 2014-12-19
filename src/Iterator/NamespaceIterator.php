@@ -7,6 +7,9 @@
 
 namespace PQuery\Iterator;
 
+use PQuery\Iterator\In\ClassInIterator;
+use PQuery\Iterator\In\FunctionInIterator;
+
 /**
  * Class NamespaceIterator
  *
@@ -44,11 +47,11 @@ class NamespaceIterator extends AbstractIterator
     }
 
     /**
-     * @return \ArrayIterator
+     * @inheritdoc
      */
-    protected function getElement()
+    public function accept()
     {
-        return $this->elements[T_NAMESPACE];
+        return true;
     }
 
     /**
@@ -56,7 +59,7 @@ class NamespaceIterator extends AbstractIterator
      */
     public function classes()
     {
-        return new ClassIterator(
+        return new ClassInIterator(
             $this->stream,
             $this->elements,
             [$this->getElement()->key(), $this->getElement()->current()]
@@ -68,10 +71,18 @@ class NamespaceIterator extends AbstractIterator
      */
     public function functions()
     {
-        return new FunctionIterator(
+        return new FunctionInIterator(
             $this->stream,
             $this->elements,
             [$this->getElement()->key(), $this->getElement()->current()]
         );
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    protected function getElement()
+    {
+        return $this->elements[T_NAMESPACE];
     }
 }

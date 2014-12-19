@@ -7,6 +7,8 @@
 
 namespace PQuery\Iterator;
 
+use PQuery\Iterator\In\FunctionInIterator;
+
 /**
  * Class ClassIterator
  *
@@ -44,11 +46,19 @@ class ClassIterator extends AbstractLayoutIterator
      */
     public function functions()
     {
-        return new FunctionIterator(
+        return new FunctionInIterator(
             $this->stream,
             $this->elements,
             [$this->getElement()->key(), $this->getElement()->current()]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function accept()
+    {
+        return true;
     }
 
     /**

@@ -44,24 +44,6 @@ abstract class AbstractIterator extends \FilterIterator
     }
 
     /**
-     * Check whether the current element of the iterator is acceptable
-     *
-     * @link http://php.net/manual/en/filteriterator.accept.php
-     * @return bool true if the current element is acceptable, otherwise false.
-     */
-    public function accept()
-    {
-        if (empty($this->range)) {
-            return true;
-        } else {
-            list($position, $finish) = $this->range;
-            $iterator = $this->getInnerIterator();
-
-            return ($iterator->key() > $position && $iterator->current() < $finish);
-        }
-    }
-
-    /**
      * @return \ArrayIterator
      */
     abstract protected function getElement();

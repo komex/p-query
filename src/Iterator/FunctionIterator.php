@@ -72,6 +72,14 @@ class FunctionIterator extends AbstractLayoutIterator
     }
 
     /**
+     * @inheritdoc
+     */
+    public function accept()
+    {
+        return true;
+    }
+
+    /**
      * @return \ArrayIterator
      */
     protected function getElement()
