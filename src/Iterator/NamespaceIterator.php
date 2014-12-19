@@ -57,7 +57,7 @@ class NamespaceIterator extends AbstractIterator
     /**
      * @return ClassIterator
      */
-    public function classes()
+    public function getClasses()
     {
         return new ClassInIterator(
             $this->stream,
@@ -69,7 +69,7 @@ class NamespaceIterator extends AbstractIterator
     /**
      * @return FunctionIterator
      */
-    public function functions()
+    public function getFunctions()
     {
         return new FunctionInIterator(
             $this->stream,

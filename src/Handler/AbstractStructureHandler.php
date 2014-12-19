@@ -53,7 +53,7 @@ abstract class AbstractStructureHandler implements EventSubscriberInterface
     {
         $this->level = $event->getLevel();
         $parser->removeListener($eventName, [$this, __FUNCTION__]);
-        $parser->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end']);
+        $parser->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end'], $this->level);
     }
 
     /**
@@ -64,7 +64,6 @@ abstract class AbstractStructureHandler implements EventSubscriberInterface
     public function end(LevelEvent $event, $eventName, Parser $parser)
     {
         if ($this->level === $event->getLevel()) {
-            $event->stopPropagation();
             $parser->removeListener($eventName, [$this, __FUNCTION__]);
             $parser->dispatch(
                 ParserEvents::NEW_ELEMENT,

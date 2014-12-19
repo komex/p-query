@@ -45,7 +45,7 @@ class ClassIterator extends AbstractLayoutIterator
     /**
      * @return NamespaceIterator
      */
-    public function namespaces()
+    public function getNamespace()
     {
         return new NamespaceOutIterator(
             $this->stream,
@@ -57,7 +57,7 @@ class ClassIterator extends AbstractLayoutIterator
     /**
      * @return FunctionIterator
      */
-    public function functions()
+    public function getFunctions()
     {
         return new FunctionInIterator(
             $this->stream,
