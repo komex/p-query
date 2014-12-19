@@ -121,7 +121,7 @@ class Stream implements \SeekableIterator, \Countable
      *
      * @return array
      */
-    private function getToken($token)
+    public function getToken($token)
     {
         if (is_array($token) === true) {
             list($code, $value) = $token;
