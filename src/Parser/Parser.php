@@ -68,12 +68,6 @@ class Parser implements \IteratorAggregate
             } else {
                 $this->elementsRegister($stream, $code);
             }
-//            $token = $stream->current();
-//            if (is_array($token) === true) {
-//                $this->elementsRegister($stream, $token[0]);
-//            } else {
-//                $this->levelControl($stream->key(), $token);
-//            }
             $stream->next();
         }
         $this->currentNamespace->setFinish($stream->count());
