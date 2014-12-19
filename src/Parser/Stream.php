@@ -34,6 +34,15 @@ class Stream implements \SeekableIterator, \Countable
 
     /**
      * @param int $position
+     * @param array $tokens
+     */
+    public function insert($position, array $tokens)
+    {
+        array_splice($this->tokens, $position, 0, $tokens);
+    }
+
+    /**
+     * @param int $position
      * @param int $length
      */
     public function remove($position, $length = 1)
