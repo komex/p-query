@@ -31,6 +31,16 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         self::$stream = new Stream(token_get_all(file_get_contents(__FILE__)));
     }
 
+    public function testSetFinal()
+    {
+        $document = new Document(self::$stream);
+        $class = $document->getClasses();
+        $class->rewind();
+        $class->setAbstract();
+        $class->setFinal();
+        $a = $document->save();
+    }
+
     /**
      * Test getNamespace
      */
