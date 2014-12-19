@@ -21,17 +21,17 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 class Parser extends EventDispatcher
 {
     /**
-     * @var array
+     * @var \ArrayIterator
      */
     private $namespaces;
     /**
-     * @var array
+     * @var \ArrayIterator
      */
     private $classes;
     /**
-     * @var array
+     * @var \ArrayIterator
      */
-    private $methods;
+    private $functions;
 
     /**
      * Init parser
@@ -49,7 +49,7 @@ class Parser extends EventDispatcher
         $this->prepare($stream);
         $event = new StreamEvent($stream);
         while ($stream->valid() === true) {
-            list($code, $value) = $stream->currentToken();
+            list($code, $value) = $stream->current();
             $eventName = ($code === null ? $value : $code);
             if ($this->hasListeners($eventName)) {
                 $this->dispatch($eventName, $event);
@@ -61,19 +61,43 @@ class Parser extends EventDispatcher
     }
 
     /**
+     * @return \ArrayIterator
+     */
+    public function getNamespaces()
+    {
+        return $this->namespaces;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getClasses()
+    {
+        return $this->classes;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getFunctions()
+    {
+        return $this->functions;
+    }
+
+    /**
      * @param NewElementEvent $event
      */
     protected function onNewElement(NewElementEvent $event)
     {
         switch ($event->getType()) {
             case T_FUNCTION:
-                array_push($this->methods, [$event->getPosition(), $event->getFinish()]);
+                $this->functions[$event->getPosition()] = $event->getFinish();
                 break;
             case T_CLASS:
-                array_push($this->classes, [$event->getPosition(), $event->getFinish()]);
+                $this->classes[$event->getPosition()] = $event->getFinish();
                 break;
             case T_NAMESPACE:
-                array_push($this->namespaces, [$event->getPosition(), $event->getFinish()]);
+                $this->namespaces[$event->getPosition()] = $event->getFinish();
                 break;
         }
     }
@@ -83,9 +107,9 @@ class Parser extends EventDispatcher
      */
     private function prepare(Stream $stream)
     {
-        $this->namespaces = [];
-        $this->classes = [];
-        $this->methods = [];
+        $this->namespaces = new \ArrayIterator;
+        $this->classes = new \ArrayIterator;
+        $this->functions = new \ArrayIterator;
         $stream->rewind();
     }
 }

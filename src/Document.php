@@ -26,6 +26,18 @@ class Document
      * @var \ArrayIterator
      */
     private $stream;
+    /**
+     * @var \ArrayIterator
+     */
+    private $namespaces;
+    /**
+     * @var \ArrayIterator
+     */
+    private $classes;
+    /**
+     * @var \ArrayIterator
+     */
+    private $functions;
 
     /**
      * @param Stream $stream
@@ -38,6 +50,9 @@ class Document
         $parser->addSubscriber(new ClassHandler());
         $parser->addSubscriber(new FunctionHandler());
         $parser->parse($stream);
+        $this->namespaces = $parser->getNamespaces();
+        $this->classes = $parser->getClasses();
+        $this->functions = $parser->getFunctions();
         $this->stream = $stream;
     }
 }
