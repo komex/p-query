@@ -16,11 +16,11 @@ namespace PQuery\Iterator;
 class ClassIterator extends AbstractLayoutIterator
 {
     /**
-     * @return \ArrayIterator
+     * @return bool
      */
-    protected function getElement()
+    public function isAbstract()
     {
-        return $this->elements[T_CLASS];
+        return $this->isAttributeExists(T_ABSTRACT, [T_WHITESPACE, T_FINAL]);
     }
 
     /**
@@ -29,5 +29,21 @@ class ClassIterator extends AbstractLayoutIterator
     public function isFinal()
     {
         return $this->isAttributeExists(T_FINAL, [T_WHITESPACE, T_ABSTRACT]);
+    }
+
+    /**
+     * @return ClassIterator
+     */
+    public function current()
+    {
+        return $this;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    protected function getElement()
+    {
+        return $this->elements[T_CLASS];
     }
 }

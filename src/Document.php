@@ -12,6 +12,7 @@ use PQuery\Handler\FunctionHandler;
 use PQuery\Handler\LevelHandler;
 use PQuery\Handler\NamespaceHandler;
 use PQuery\Iterator\ClassIterator;
+use PQuery\Iterator\FunctionIterator;
 use PQuery\Parser\Parser;
 use PQuery\Parser\Stream;
 
@@ -53,8 +54,19 @@ class Document
         $this->stream = $stream;
     }
 
+    /**
+     * @return ClassIterator
+     */
     public function getClasses()
     {
         return new ClassIterator($this->stream, $this->elements);
+    }
+
+    /**
+     * @return FunctionIterator
+     */
+    public function getFunctions()
+    {
+        return new FunctionIterator($this->stream, $this->elements);
     }
 }

@@ -37,14 +37,6 @@ abstract class AbstractIterator implements \Iterator, \Countable
     }
 
     /**
-     * @return ClassIterator
-     */
-    public function current()
-    {
-        return $this;
-    }
-
-    /**
      * @inheritdoc
      */
     public function next()

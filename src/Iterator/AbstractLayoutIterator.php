@@ -32,14 +32,6 @@ abstract class AbstractLayoutIterator extends AbstractIterator
     }
 
     /**
-     * @return bool
-     */
-    public function isAbstract()
-    {
-        return $this->isAttributeExists(T_ABSTRACT, [T_WHITESPACE, T_FINAL]);
-    }
-
-    /**
      * @param int $attribute
      * @param array $allowed
      *
