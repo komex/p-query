@@ -13,6 +13,8 @@ use PQuery\Collection\NamespaceCollection;
 use PQuery\Element\ClassElement;
 use PQuery\Element\FunctionElement;
 use PQuery\Element\NamespaceElement;
+use PQuery\Parser\Parser;
+use PQuery\Parser\Stream;
 
 /**
  * Class Document
@@ -32,9 +34,9 @@ class Document
     private $elements;
 
     /**
-     * @param \ArrayIterator $stream
+     * @param Stream $stream
      */
-    public function __construct(\ArrayIterator $stream)
+    public function __construct(Stream $stream)
     {
         $parser = new Parser($stream);
         $this->elements = $parser->getIterator();
