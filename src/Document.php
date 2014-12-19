@@ -13,6 +13,7 @@ use PQuery\Handler\LevelHandler;
 use PQuery\Handler\NamespaceHandler;
 use PQuery\Iterator\ClassIterator;
 use PQuery\Iterator\FunctionIterator;
+use PQuery\Iterator\NamespaceIterator;
 use PQuery\Parser\Parser;
 use PQuery\Parser\Stream;
 
@@ -52,6 +53,14 @@ class Document
             ]
         );
         $this->stream = $stream;
+    }
+
+    /**
+     * @return NamespaceIterator
+     */
+    public function getNamespaces()
+    {
+        return new NamespaceIterator($this->stream, $this->elements);
     }
 
     /**
