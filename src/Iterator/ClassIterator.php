@@ -8,6 +8,7 @@
 namespace PQuery\Iterator;
 
 use PQuery\Iterator\In\FunctionInIterator;
+use PQuery\Iterator\Out\NamespaceOutIterator;
 
 /**
  * Class ClassIterator
@@ -39,6 +40,18 @@ class ClassIterator extends AbstractLayoutIterator
     public function current()
     {
         return $this;
+    }
+
+    /**
+     * @return NamespaceIterator
+     */
+    public function namespaces()
+    {
+        return new NamespaceOutIterator(
+            $this->stream,
+            $this->elements,
+            [$this->getElement()->key(), $this->getElement()->current()]
+        );
     }
 
     /**

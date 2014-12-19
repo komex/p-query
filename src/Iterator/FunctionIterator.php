@@ -7,6 +7,9 @@
 
 namespace PQuery\Iterator;
 
+use PQuery\Iterator\Out\ClassOutIterator;
+use PQuery\Iterator\Out\NamespaceOutIterator;
+
 /**
  * Class FunctionIterator
  *
@@ -77,6 +80,30 @@ class FunctionIterator extends AbstractLayoutIterator
     public function accept()
     {
         return true;
+    }
+
+    /**
+     * @return NamespaceIterator
+     */
+    public function namespaces()
+    {
+        return new NamespaceOutIterator(
+            $this->stream,
+            $this->elements,
+            [$this->getElement()->key(), $this->getElement()->current()]
+        );
+    }
+
+    /**
+     * @return ClassIterator
+     */
+    public function classes()
+    {
+        return new ClassOutIterator(
+            $this->stream,
+            $this->elements,
+            [$this->getElement()->key(), $this->getElement()->current()]
+        );
     }
 
     /**
