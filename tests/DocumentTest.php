@@ -46,7 +46,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
             foreach ($classes as $class) {
                 $this->assertSame(__CLASS__, $namespace->getName() . '\\' . $class->getName());
                 $functions = $class->getFunctions();
-                $this->assertCount(2, $functions);
+                $this->assertCount(3, $functions);
                 foreach ($functions as $function) {
                     $this->assertSame('setUpBeforeClass', $function->getName());
                     $this->assertTrue($function->isStatic());
@@ -58,5 +58,14 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
+    }
+
+    /**
+     * Test save method
+     */
+    public function testSave()
+    {
+        $document = new Document(self::$stream);
+        $this->assertSame(file_get_contents(__FILE__), $document->save());
     }
 }

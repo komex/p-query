@@ -78,4 +78,17 @@ class Document
     {
         return new FunctionIterator($this->stream, $this->elements);
     }
+
+    /**
+     * @return string
+     */
+    public function save()
+    {
+        $content = '';
+        foreach ($this->stream as $token) {
+            $content .= $token[1];
+        }
+
+        return $content;
+    }
 }
