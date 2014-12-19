@@ -8,6 +8,7 @@
 namespace PQuery;
 
 use PQuery\Handler\ClassHandler;
+use PQuery\Handler\FunctionHandler;
 use PQuery\Handler\LevelHandler;
 use PQuery\Handler\NamespaceHandler;
 use PQuery\Parser\Parser;
@@ -33,8 +34,9 @@ class Document
     {
         $parser = new Parser();
         $parser->addSubscriber(new NamespaceHandler());
-        $parser->addSubscriber(new ClassHandler());
         $parser->addSubscriber(new LevelHandler());
+        $parser->addSubscriber(new ClassHandler());
+        $parser->addSubscriber(new FunctionHandler());
         $parser->parse($stream);
         $this->stream = $stream;
     }

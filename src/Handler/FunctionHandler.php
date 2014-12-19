@@ -8,19 +8,19 @@
 namespace PQuery\Handler;
 
 /**
- * Class ClassHandler
+ * Class FunctionHandler
  *
  * @package PQuery\Handler
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class ClassHandler extends AbstractStructureHandler
+class FunctionHandler extends AbstractStructureHandler
 {
     /**
      * @inheritdoc
      */
     public static function getSubscribedEvents()
     {
-        return [T_CLASS => 'handle'];
+        return [T_FUNCTION => 'handle'];
     }
 
     /**
@@ -28,6 +28,6 @@ class ClassHandler extends AbstractStructureHandler
      */
     protected function getType()
     {
-        return T_CLASS;
+        return T_FUNCTION;
     }
 }

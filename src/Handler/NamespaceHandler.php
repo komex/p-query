@@ -95,6 +95,7 @@ class NamespaceHandler implements EventSubscriberInterface
      */
     public function start(LevelEvent $event, $eventName, Parser $parser)
     {
+        $this->level = $event->getLevel();
         $parser->removeListener(';', [$this, 'globalNS']);
         $parser->removeListener(ParserEvents::LEVEL_UP, [$this, 'start']);
         $parser->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end']);
