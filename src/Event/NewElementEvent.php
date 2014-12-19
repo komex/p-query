@@ -1,0 +1,68 @@
+<?php
+/**
+ * This file is a part of p-query project.
+ *
+ * (c) Andrey Kolchenko <andrey@kolchenko.me>
+ */
+
+namespace PQuery\Event;
+
+use Symfony\Component\EventDispatcher\Event;
+
+/**
+ * Class NewElementEvent
+ *
+ * @package PQuery\Handler
+ * @author Andrey Kolchenko <andrey@kolchenko.me>
+ */
+class NewElementEvent extends Event
+{
+    /**
+     * @var int
+     */
+    private $type;
+    /**
+     * @var int
+     */
+    private $position;
+    /**
+     * @var int
+     */
+    private $finish;
+
+    /**
+     * @param int $type
+     * @param int $position
+     * @param int $finish
+     */
+    public function __construct($type, $position, $finish)
+    {
+        $this->type = $type;
+        $this->position = $position;
+        $this->finish = $finish;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFinish()
+    {
+        return $this->finish;
+    }
+}

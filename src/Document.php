@@ -7,6 +7,9 @@
 
 namespace PQuery;
 
+use PQuery\Handler\ClassHandler;
+use PQuery\Handler\LevelHandler;
+use PQuery\Handler\NamespaceHandler;
 use PQuery\Parser\Parser;
 use PQuery\Parser\Stream;
 
@@ -22,18 +25,17 @@ class Document
      * @var \ArrayIterator
      */
     private $stream;
-    /**
-     * @var \ArrayIterator
-     */
-    private $elements;
 
     /**
      * @param Stream $stream
      */
     public function __construct(Stream $stream)
     {
-        $parser = new Parser($stream);
-        $this->elements = $parser->getIterator();
+        $parser = new Parser();
+        $parser->addSubscriber(new NamespaceHandler());
+        $parser->addSubscriber(new ClassHandler());
+        $parser->addSubscriber(new LevelHandler());
+        $parser->parse($stream);
         $this->stream = $stream;
     }
 }
