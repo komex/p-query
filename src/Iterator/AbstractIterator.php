@@ -15,7 +15,7 @@ use PQuery\Parser\Stream;
  * @package PQuery\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-abstract class AbstractIterator implements \Iterator, \Countable
+abstract class AbstractIterator extends \FilterIterator
 {
     /**
      * @var Stream
@@ -25,55 +25,40 @@ abstract class AbstractIterator implements \Iterator, \Countable
      * @var \ArrayIterator[]
      */
     protected $elements;
+    /**
+     * @var array
+     */
+    protected $range;
 
     /**
      * @param Stream $stream
      * @param \ArrayIterator $elements
+     * @param array $range
      */
-    public function __construct(Stream $stream, \ArrayIterator $elements)
+    public function __construct(Stream $stream, \ArrayIterator $elements, array $range = [])
     {
         $this->stream = $stream;
         $this->elements = $elements;
+        $this->range = $range;
+        parent::__construct($this->getElement());
     }
 
     /**
-     * @inheritdoc
+     * Check whether the current element of the iterator is acceptable
+     *
+     * @link http://php.net/manual/en/filteriterator.accept.php
+     * @return bool true if the current element is acceptable, otherwise false.
      */
-    public function next()
+    public function accept()
     {
-        $this->getElement()->next();
-    }
+        if (empty($this->range)) {
+            return true;
+        } else {
+            list($position, $finish) = $this->range;
+            $iterator = $this->getInnerIterator();
 
-    /**
-     * @return int
-     */
-    public function key()
-    {
-        return $this->getElement()->key();
-    }
-
-    /**
-     * @return bool
-     */
-    public function valid()
-    {
-        return $this->getElement()->valid();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rewind()
-    {
-        $this->getElement()->rewind();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function count()
-    {
-        return $this->getElement()->count();
+            return ($iterator->key() > $position && $iterator->current() < $finish);
+        }
     }
 
     /**

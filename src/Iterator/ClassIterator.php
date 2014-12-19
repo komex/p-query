@@ -40,6 +40,18 @@ class ClassIterator extends AbstractLayoutIterator
     }
 
     /**
+     * @return FunctionIterator
+     */
+    public function functions()
+    {
+        return new FunctionIterator(
+            $this->stream,
+            $this->elements,
+            [$this->getElement()->key(), $this->getElement()->current()]
+        );
+    }
+
+    /**
      * @return \ArrayIterator
      */
     protected function getElement()

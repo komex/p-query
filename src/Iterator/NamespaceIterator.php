@@ -50,4 +50,28 @@ class NamespaceIterator extends AbstractIterator
     {
         return $this->elements[T_NAMESPACE];
     }
+
+    /**
+     * @return ClassIterator
+     */
+    public function classes()
+    {
+        return new ClassIterator(
+            $this->stream,
+            $this->elements,
+            [$this->getElement()->key(), $this->getElement()->current()]
+        );
+    }
+
+    /**
+     * @return FunctionIterator
+     */
+    public function functions()
+    {
+        return new FunctionIterator(
+            $this->stream,
+            $this->elements,
+            [$this->getElement()->key(), $this->getElement()->current()]
+        );
+    }
 }
