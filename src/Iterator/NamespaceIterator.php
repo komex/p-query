@@ -40,6 +40,31 @@ class NamespaceIterator extends AbstractIterator
     }
 
     /**
+     * @param string $namespace
+     *
+     * @return $this
+     */
+    public function setName($namespace)
+    {
+        $namespaceTokens = $this->getNamespaceTokens($namespace);
+        $namespaceTokensCount = count($namespaceTokens);
+        $currentTokensCount = count($this->getNamespaceTokens($this->getName()));
+        list($position) = $this->getInnerIterator()->current();
+        $this->stream->seek($position + 2);
+        while ($this->stream->valid() === true) {
+            list($code) = $this->stream->current();
+            if ($code !== T_WHITESPACE) {
+                break;
+            }
+            $this->stream->next();
+        }
+        $this->stream->replace($this->stream->key(), $currentTokensCount, $namespaceTokens);
+        $this->shiftPointers($position, ($namespaceTokensCount - $currentTokensCount));
+
+        return $this;
+    }
+
+    /**
      * @return NamespaceIterator
      */
     public function current()
@@ -85,5 +110,25 @@ class NamespaceIterator extends AbstractIterator
     protected function getElement()
     {
         return $this->elements[T_NAMESPACE];
+    }
+
+    /**
+     * @param string $namespace
+     *
+     * @return array
+     */
+    private function getNamespaceTokens($namespace)
+    {
+        $parts = explode('\\', $namespace);
+        $namespaceTokens = [];
+        foreach ($parts as $part) {
+            if (empty($part) === false) {
+                array_push($namespaceTokens, [T_STRING, $part]);
+            }
+            array_push($namespaceTokens, [T_NS_SEPARATOR, '\\']);
+        }
+        array_pop($namespaceTokens);
+
+        return $namespaceTokens;
     }
 }

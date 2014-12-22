@@ -44,6 +44,24 @@ abstract class AbstractIterator extends \FilterIterator
     }
 
     /**
+     * @param int $position Stream position
+     * @param int $length
+     */
+    protected function shiftPointers($position, $length)
+    {
+        foreach ($this->elements as $list) {
+            $count = ($list->count() - 1);
+            // Without reset().
+            for ($index = $count; $index >= 0; $index--) {
+                list($positionPointer, $finish) = $list[$index];
+                if ($positionPointer >= $position) {
+                    $list[$index] = [$positionPointer + $length, $finish + $length];
+                }
+            }
+        }
+    }
+
+    /**
      * @return \ArrayIterator
      */
     abstract protected function getElement();

@@ -39,7 +39,7 @@ abstract class AbstractLayoutIterator extends AbstractIterator
     {
         // Move pointer to name position.
         $this->getName();
-        $this->stream->replace($this->stream->key(), [[T_STRING, $name]]);
+        $this->stream->replace($this->stream->key(), 1, [[T_STRING, $name]]);
     }
 
     /**
@@ -83,23 +83,5 @@ abstract class AbstractLayoutIterator extends AbstractIterator
     {
         $this->stream->remove($position, $length);
         $this->shiftPointers($position, -$length);
-    }
-
-    /**
-     * @param int $position Stream position
-     * @param int $length
-     */
-    protected function shiftPointers($position, $length)
-    {
-        foreach ($this->elements as $list) {
-            $count = ($list->count() - 1);
-            // Without reset().
-            for ($index = $count; $index >= 0; $index--) {
-                list($positionPointer, $finish) = $list[$index];
-                if ($positionPointer >= $position) {
-                    $list[$index] = [$positionPointer + $length, $finish + $length];
-                }
-            }
-        }
     }
 }

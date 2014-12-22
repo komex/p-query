@@ -52,11 +52,12 @@ class Stream implements \SeekableIterator, \Countable
 
     /**
      * @param int $position
+     * @param int $length
      * @param array $tokens
      */
-    public function replace($position, array $tokens)
+    public function replace($position, $length, array $tokens)
     {
-        array_splice($this->tokens, $position, count($tokens), $tokens);
+        array_splice($this->tokens, $position, $length, $tokens);
     }
 
     /**
