@@ -30,7 +30,7 @@ class Document
      */
     private $elements;
     /**
-     * @var \ArrayIterator
+     * @var Stream
      */
     private $stream;
 
