@@ -23,7 +23,8 @@ class NamespaceIterator extends AbstractIterator
      */
     public function getName()
     {
-        $this->stream->seek($this->getElement()->key() + 2);
+        list($position) = $this->getInnerIterator()->current();
+        $this->stream->seek($position + 2);
         $name = '';
         while ($this->stream->valid() === true) {
             list($code, $value) = $this->stream->current();
@@ -62,7 +63,7 @@ class NamespaceIterator extends AbstractIterator
         return new ClassInIterator(
             $this->stream,
             $this->elements,
-            [$this->getElement()->key(), $this->getElement()->current()]
+            $this->getElement()->current()
         );
     }
 
@@ -74,7 +75,7 @@ class NamespaceIterator extends AbstractIterator
         return new FunctionInIterator(
             $this->stream,
             $this->elements,
-            [$this->getElement()->key(), $this->getElement()->current()]
+            $this->getElement()->current()
         );
     }
 

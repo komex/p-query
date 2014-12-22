@@ -90,7 +90,7 @@ class FunctionIterator extends AbstractLayoutIterator
         return new NamespaceOutIterator(
             $this->stream,
             $this->elements,
-            [$this->getElement()->key(), $this->getElement()->current()]
+            $this->getElement()->current()
         );
     }
 
@@ -102,7 +102,7 @@ class FunctionIterator extends AbstractLayoutIterator
         return new ClassOutIterator(
             $this->stream,
             $this->elements,
-            [$this->getElement()->key(), $this->getElement()->current()]
+            $this->getElement()->current()
         );
     }
 

@@ -20,7 +20,8 @@ abstract class AbstractLayoutIterator extends AbstractIterator
      */
     public function getName()
     {
-        $this->stream->seek($this->getElement()->key() + 2);
+        list($position) = $this->getInnerIterator()->current();
+        $this->stream->seek($position + 2);
         while ($this->stream->valid() === true) {
             list($code, $value) = $this->stream->current();
             if ($code === T_STRING) {
@@ -32,6 +33,16 @@ abstract class AbstractLayoutIterator extends AbstractIterator
     }
 
     /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        // Move pointer to name position.
+        $this->getName();
+        $this->stream->replace($this->stream->key(), [[T_STRING, $name]]);
+    }
+
+    /**
      * @param int $attribute
      * @param array $allowed
      *
@@ -39,7 +50,8 @@ abstract class AbstractLayoutIterator extends AbstractIterator
      */
     protected function isAttributeExists($attribute, array $allowed = [])
     {
-        $this->stream->seek($this->getElement()->key() - 1);
+        list($position) = $this->getInnerIterator()->current();
+        $this->stream->seek($position - 1);
         while ($this->stream->valid() === true) {
             list($code) = $this->stream->current();
             if ($code === $attribute) {
@@ -51,5 +63,43 @@ abstract class AbstractLayoutIterator extends AbstractIterator
         }
 
         return false;
+    }
+
+    /**
+     * @param int $position Stream position
+     * @param array $tokens
+     */
+    protected function insert($position, array $tokens)
+    {
+        $this->stream->insert($position, $tokens);
+        $this->shiftPointers($position, count($tokens));
+    }
+
+    /**
+     * @param int $position Stream position
+     * @param int $length
+     */
+    protected function remove($position, $length)
+    {
+        $this->stream->remove($position, $length);
+        $this->shiftPointers($position, -$length);
+    }
+
+    /**
+     * @param int $position Stream position
+     * @param int $length
+     */
+    protected function shiftPointers($position, $length)
+    {
+        foreach ($this->elements as $list) {
+            $count = ($list->count() - 1);
+            // Without reset().
+            for ($index = $count; $index >= 0; $index--) {
+                list($positionPointer, $finish) = $list[$index];
+                if ($positionPointer >= $position) {
+                    $list[$index] = [$positionPointer + $length, $finish + $length];
+                }
+            }
+        }
     }
 }
