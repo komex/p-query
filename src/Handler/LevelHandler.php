@@ -47,14 +47,14 @@ class LevelHandler implements EventSubscriberInterface
 
     /**
      * @param StreamEvent $event
-     * @param $eventName
+     * @param string $eventName
      * @param Parser $parser
      */
     public function levelUp(StreamEvent $event, $eventName, Parser $parser)
     {
         $stream = $event->getStream();
         $parser->dispatch(ParserEvents::LEVEL_UP, $this->level->setPosition($stream->key()));
-        $this->level->up();
+        $this->level->levelUp();
         $stream->next();
     }
 
@@ -66,7 +66,7 @@ class LevelHandler implements EventSubscriberInterface
     public function levelDown(StreamEvent $event, $eventName, Parser $parser)
     {
         $stream = $event->getStream();
-        $parser->dispatch(ParserEvents::LEVEL_DOWN, $this->level->down()->setPosition($stream->key()));
+        $parser->dispatch(ParserEvents::LEVEL_DOWN, $this->level->levelDown()->setPosition($stream->key()));
         $stream->next();
     }
 }

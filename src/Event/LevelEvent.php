@@ -51,7 +51,7 @@ class LevelEvent extends Event
      *
      * @return $this
      */
-    public function up()
+    public function levelUp()
     {
         $this->level++;
 
@@ -63,7 +63,7 @@ class LevelEvent extends Event
      *
      * @return $this
      */
-    public function down()
+    public function levelDown()
     {
         $this->level--;
 
