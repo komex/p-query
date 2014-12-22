@@ -67,6 +67,52 @@ class FunctionIterator extends AbstractLayoutIterator
     }
 
     /**
+     * @param bool $static
+     *
+     * @return $this
+     */
+    public function setStatic($static = true)
+    {
+        return $this->attributeManager($static, $this->isStatic(), [T_STATIC, 'static']);
+    }
+
+    /**
+     * @param bool $public
+     */
+    public function setPublic($public = true)
+    {
+        if ($public === true) {
+            $this->attributeManager(false, $this->isProtected(), [T_PROTECTED, 'protected']);
+            $this->attributeManager(false, $this->isPrivate(), [T_PRIVATE, 'private']);
+        }
+        $this->attributeManager($public, $this->isPublic(), [T_PUBLIC, 'public']);
+    }
+
+    /**
+     * @param bool $protected
+     */
+    public function setProtected($protected = true)
+    {
+        if ($protected === true) {
+            $this->attributeManager(false, $this->isPublic(), [T_PUBLIC, 'public']);
+            $this->attributeManager(false, $this->isPrivate(), [T_PRIVATE, 'private']);
+        }
+        $this->attributeManager($protected, $this->isProtected(), [T_PROTECTED, 'protected']);
+    }
+
+    /**
+     * @param bool $private
+     */
+    public function setPrivate($private = true)
+    {
+        if ($private === true) {
+            $this->attributeManager(false, $this->isPublic(), [T_PUBLIC, 'public']);
+            $this->attributeManager(false, $this->isProtected(), [T_PROTECTED, 'protected']);
+        }
+        $this->attributeManager($private, $this->isPrivate(), [T_PRIVATE, 'private']);
+    }
+
+    /**
      * @return FunctionIterator
      */
     public function current()

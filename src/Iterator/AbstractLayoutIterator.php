@@ -43,6 +43,36 @@ abstract class AbstractLayoutIterator extends AbstractIterator
     }
 
     /**
+     * @param bool $final
+     *
+     * @return $this
+     */
+    public function setFinal($final = true)
+    {
+        return $this->attributeManager($final, $this->isFinal(), [T_FINAL, 'final']);
+    }
+
+    /**
+     * @param bool $abstract
+     *
+     * @return $this
+     */
+    public function setAbstract($abstract = true)
+    {
+        return $this->attributeManager($abstract, $this->isAbstract(), [T_ABSTRACT, 'abstract']);
+    }
+
+    /**
+     * @return bool
+     */
+    abstract public function isAbstract();
+
+    /**
+     * @return bool
+     */
+    abstract public function isFinal();
+
+    /**
      * @param int $attribute
      * @param array $allowed
      *
@@ -83,5 +113,24 @@ abstract class AbstractLayoutIterator extends AbstractIterator
     {
         $this->stream->remove($position, $length);
         $this->shiftPointers($position, -$length);
+    }
+
+    /**
+     * @param bool $need
+     * @param bool $exists
+     * @param array $token
+     *
+     * @return $this
+     */
+    protected function attributeManager($need, $exists, array $token)
+    {
+        if ($need === true && $exists === false) {
+            list($position) = $this->getInnerIterator()->current();
+            $this->insert($position, [$token, [T_WHITESPACE, ' ']]);
+        } elseif ($need === false && $exists === true) {
+            $this->remove($this->stream->key(), 2);
+        }
+
+        return $this;
     }
 }
