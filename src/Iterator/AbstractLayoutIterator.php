@@ -20,7 +20,8 @@ abstract class AbstractLayoutIterator extends AbstractIterator
      */
     public function getName()
     {
-        $this->stream->seek($this->getElement()->key() + 2);
+        list($position) = $this->getInnerIterator()->current();
+        $this->stream->seek($position + 2);
         while ($this->stream->valid() === true) {
             list($code, $value) = $this->stream->current();
             if ($code === T_STRING) {
@@ -39,7 +40,8 @@ abstract class AbstractLayoutIterator extends AbstractIterator
      */
     protected function isAttributeExists($attribute, array $allowed = [])
     {
-        $this->stream->seek($this->getElement()->key() - 1);
+        list($position) = $this->getInnerIterator()->current();
+        $this->stream->seek($position - 1);
         while ($this->stream->valid() === true) {
             list($code) = $this->stream->current();
             if ($code === $attribute) {

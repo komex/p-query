@@ -43,11 +43,10 @@ class ClassIterator extends AbstractLayoutIterator
     {
         $isFinal = $this->isFinal();
         if ($final === true && $isFinal === false) {
-            $this->stream->insert($this->getElement()->key(), [[T_FINAL, 'final'], [T_WHITESPACE, ' ']]);
+            list($position, $finish) = $this->getElement()->current();
+            $this->stream->insert($position, [[T_FINAL, 'final'], [T_WHITESPACE, ' ']]);
+            $this->getElement()->offsetSet($this->getInnerIterator()->key(), [$position + 2, $finish + 2]);
             // @todo Recount positions of all elements.
-            $newPosition = $this->getElement()->key() + 2;
-            $this->getElement()->offsetSet($newPosition, $this->getElement()->current());
-            $this->getElement()->offsetUnset($this->getElement()->key());
             $this->setAbstract(false);
         } elseif ($final === false && $isFinal === true) {
             $this->stream->remove($this->stream->key(), 2);
@@ -65,10 +64,9 @@ class ClassIterator extends AbstractLayoutIterator
     {
         $isAbstract = $this->isAbstract();
         if ($abstract === true && $isAbstract === false) {
-            $this->stream->insert($this->getElement()->key(), [[T_ABSTRACT, 'abstract'], [T_WHITESPACE, ' ']]);
-            $newPosition = $this->getElement()->key() + 2;
-            $this->getElement()->offsetSet($newPosition, $this->getElement()->current());
-            $this->getElement()->offsetUnset($this->getElement()->key());
+            list($position, $finish) = $this->getInnerIterator()->current();
+            $this->stream->insert($position, [[T_ABSTRACT, 'abstract'], [T_WHITESPACE, ' ']]);
+            $this->getElement()->offsetSet($this->getInnerIterator()->key(), [$position + 2, $finish + 2]);
             $this->setFinal(false);
         } elseif ($abstract === false && $isAbstract === true) {
             $this->stream->remove($this->stream->key(), 2);
@@ -93,7 +91,7 @@ class ClassIterator extends AbstractLayoutIterator
         return new NamespaceOutIterator(
             $this->stream,
             $this->elements,
-            [$this->getElement()->key(), $this->getElement()->current()]
+            $this->getInnerIterator()->current()
         );
     }
 
@@ -105,7 +103,7 @@ class ClassIterator extends AbstractLayoutIterator
         return new FunctionInIterator(
             $this->stream,
             $this->elements,
-            [$this->getElement()->key(), $this->getElement()->current()]
+            $this->getInnerIterator()->current()
         );
     }
 
