@@ -136,7 +136,7 @@ class FunctionIterator extends AbstractLayoutIterator
         return new NamespaceOutIterator(
             $this->stream,
             $this->elements,
-            $this->getElement()->current()
+            $this->getInnerIterator()->current()
         );
     }
 
@@ -148,16 +148,16 @@ class FunctionIterator extends AbstractLayoutIterator
         return new ClassOutIterator(
             $this->stream,
             $this->elements,
-            $this->getElement()->current()
+            $this->getInnerIterator()->current()
         );
     }
 
     /**
-     * @return \ArrayIterator
+     * @return int
      */
-    protected function getElement()
+    protected function getKey()
     {
-        return $this->elements[T_FUNCTION];
+        return T_FUNCTION;
     }
 
     /**

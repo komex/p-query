@@ -88,7 +88,7 @@ class NamespaceIterator extends AbstractIterator
         return new ClassInIterator(
             $this->stream,
             $this->elements,
-            $this->getElement()->current()
+            $this->getInnerIterator()->current()
         );
     }
 
@@ -100,16 +100,16 @@ class NamespaceIterator extends AbstractIterator
         return new FunctionInIterator(
             $this->stream,
             $this->elements,
-            $this->getElement()->current()
+            $this->getInnerIterator()->current()
         );
     }
 
     /**
-     * @return \ArrayIterator
+     * @return int
      */
-    protected function getElement()
+    protected function getKey()
     {
-        return $this->elements[T_NAMESPACE];
+        return T_NAMESPACE;
     }
 
     /**

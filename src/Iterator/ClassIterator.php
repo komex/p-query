@@ -75,10 +75,10 @@ class ClassIterator extends AbstractLayoutIterator
     }
 
     /**
-     * @return \ArrayIterator
+     * @return int
      */
-    protected function getElement()
+    protected function getKey()
     {
-        return $this->elements[T_CLASS];
+        return T_CLASS;
     }
 }

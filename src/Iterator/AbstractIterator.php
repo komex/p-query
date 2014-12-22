@@ -40,7 +40,7 @@ abstract class AbstractIterator extends \FilterIterator
         $this->stream = $stream;
         $this->elements = $elements;
         $this->range = $range;
-        parent::__construct($this->getElement());
+        parent::__construct($this->elements[$this->getKey()]);
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractIterator extends \FilterIterator
     }
 
     /**
-     * @return \ArrayIterator
+     * @return int
      */
-    abstract protected function getElement();
+    abstract protected function getKey();
 }
