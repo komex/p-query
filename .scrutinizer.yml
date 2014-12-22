@@ -1,0 +1,28 @@
+filter:
+    paths:
+        - src/
+checks:
+    php:
+        code_rating: true
+        duplication: true
+tools:
+    php_cpd: true
+    php_cs_fixer:
+        config:
+            level: psr2
+    php_mess_detector: true
+    external_code_coverage: true
+    php_code_coverage:
+        enabled: true
+        test_command: ./vendor/bin/phpunit
+    php_code_sniffer:
+        enabled: true
+        config:
+            standard: PSR2
+        filter:
+            paths: ["src/*", "tests/*"]
+    php_sim: true
+    php_pdepend: true
+    php_analyzer:
+        dependency_paths:
+            - vendor/
