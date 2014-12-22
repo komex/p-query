@@ -1,33 +1,42 @@
 {
-  "name": "komex/p-query",
-  "description": "Works with PHP files like jQuery with DOM",
-  "minimum-stability": "stable",
-  "license": "CC-BY-SA-4.0",
-  "authors": [
-    {
-      "name": "Andrey Kolchenko",
-      "email": "andrey@kolchenko.me"
+    "name": "komex/perk",
+    "description": "Library allows to modify namespaces, classes and methods in php files.",
+    "keywords": ["php", "library", "namespace", "class", "method", "modify"],
+    "minimum-stability": "stable",
+    "license": "CC-BY-SA-4.0",
+    "authors": [
+        {
+            "name": "Andrey Kolchenko",
+            "email": "andrey@kolchenko.me"
+        }
+    ],
+    "support": {
+        "email": "andrey@kolchenko.me",
+        "issues": "https://github.com/komex/perk/issues",
+        "source": "https://github.com/komex/perk.git"
+    },
+    "require": {
+        "php": ">=5.4",
+        "ext-SPL": "*",
+        "ext-tokenizer": "*",
+        "symfony/event-dispatcher": "2.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.3.1",
+        "squizlabs/php_codesniffer": "1.5.*",
+        "phpmd/phpmd": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "Perk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Perk\\Test\\": "tests/"
+        }
+    },
+    "suggest": {
+        "komex/influence": "Allows to mock any classes, objects and new instances"
     }
-  ],
-  "support": {
-    "email": "andrey@kolchenko.me",
-    "issues": "https://github.com/komex/p-query/issues",
-    "source": "https://github.com/komex/p-query.git"
-  },
-  "require": {
-    "php": ">=5.4",
-    "ext-SPL": "*",
-    "ext-tokenizer": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.3.1",
-    "squizlabs/php_codesniffer": "1.5.*",
-    "phpmd/phpmd" : "@stable"
-  },
-  "autoload": {
-    "psr-4": {
-      "PQuery\\": "src/",
-      "Test\\PQuery\\": "tests/"
-    }
-  }
 }
