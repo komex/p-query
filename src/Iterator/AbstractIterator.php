@@ -22,7 +22,7 @@ abstract class AbstractIterator extends \FilterIterator
      */
     protected $stream;
     /**
-     * @var \ArrayIterator[]|\ArrayIterator
+     * @var \ArrayIterator
      */
     protected $elements;
     /**
