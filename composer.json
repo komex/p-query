@@ -1,6 +1,7 @@
 {
     "name": "komex/perk",
-    "description": "Works with PHP files like jQuery with DOM",
+    "description": "Library allows to modify namespaces, classes and methods in php files.",
+    "keywords": ["php", "library", "namespace", "class", "method", "modify"],
     "minimum-stability": "stable",
     "license": "CC-BY-SA-4.0",
     "authors": [
@@ -27,8 +28,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Perk\\": "src/",
-            "Test\\Perk\\": "tests/"
+            "Perk\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Perk\\Test\\": "tests/"
+        }
+    },
+    "suggest": {
+        "komex/influence": "Allows to mock any classes, objects and new instances"
     }
 }
