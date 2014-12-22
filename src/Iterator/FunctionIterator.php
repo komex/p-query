@@ -113,6 +113,28 @@ class FunctionIterator extends AbstractLayoutIterator
     }
 
     /**
+     * @return string
+     */
+    public function getContent()
+    {
+        list($position, $finish) = $this->getInnerIterator()->current();
+        $this->stream->seek($position + 4);
+        $content = '';
+        $started = false;
+        while ($this->stream->valid() === true && $this->stream->key() < $finish) {
+            list(, $value) = $this->stream->current();
+            if ($started === true) {
+                $content .= $value;
+            } elseif ($value === '{') {
+                $started = true;
+            }
+            $this->stream->next();
+        }
+
+        return $content;
+    }
+
+    /**
      * @return FunctionIterator
      */
     public function current()
