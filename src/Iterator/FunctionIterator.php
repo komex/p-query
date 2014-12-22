@@ -189,7 +189,7 @@ class FunctionIterator extends AbstractLayoutIterator
     }
 
     /**
-     * @return NamespaceIterator
+     * @return NamespaceOutIterator
      */
     public function getNamespace()
     {
@@ -201,7 +201,7 @@ class FunctionIterator extends AbstractLayoutIterator
     }
 
     /**
-     * @return ClassIterator
+     * @return ClassOutIterator
      */
     public function getClass()
     {

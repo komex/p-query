@@ -81,7 +81,7 @@ class NamespaceIterator extends AbstractIterator
     }
 
     /**
-     * @return ClassIterator
+     * @return ClassInIterator
      */
     public function getClasses()
     {
@@ -93,7 +93,7 @@ class NamespaceIterator extends AbstractIterator
     }
 
     /**
-     * @return FunctionIterator
+     * @return FunctionInIterator
      */
     public function getFunctions()
     {
