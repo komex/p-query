@@ -33,6 +33,16 @@ abstract class AbstractLayoutIterator extends AbstractIterator
     }
 
     /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        // Move pointer to name position.
+        $this->getName();
+        $this->stream->replace($this->stream->key(), [[T_STRING, $name]]);
+    }
+
+    /**
      * @param int $attribute
      * @param array $allowed
      *

@@ -51,6 +51,15 @@ class Stream implements \SeekableIterator, \Countable
     }
 
     /**
+     * @param int $position
+     * @param array $tokens
+     */
+    public function replace($position, array $tokens)
+    {
+        array_splice($this->tokens, $position, count($tokens), $tokens);
+    }
+
+    /**
      * Return the current element
      *
      * @link http://php.net/manual/en/iterator.current.php
