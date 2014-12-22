@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is a part of perk project.
+ * This file is a part of Perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
