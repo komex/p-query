@@ -7,9 +7,9 @@
 
 namespace Perk\Parser;
 
-use Perk\Event\StreamEvent;
-use Perk\Event\ParserEvents;
 use Perk\Event\NewElementEvent;
+use Perk\Event\ParserEvents;
+use Perk\Event\StreamEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
