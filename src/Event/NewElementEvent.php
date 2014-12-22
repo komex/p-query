@@ -28,17 +28,23 @@ class NewElementEvent extends Event
     /**
      * @var int
      */
+    private $start;
+    /**
+     * @var int
+     */
     private $finish;
 
     /**
      * @param int $type
      * @param int $position
+     * @param int $start
      * @param int $finish
      */
-    public function __construct($type, $position, $finish)
+    public function __construct($type, $position, $start, $finish)
     {
         $this->type = $type;
         $this->position = $position;
+        $this->start = $start;
         $this->finish = $finish;
     }
 
@@ -64,5 +70,13 @@ class NewElementEvent extends Event
     public function getFinish()
     {
         return $this->finish;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStart()
+    {
+        return $this->start;
     }
 }

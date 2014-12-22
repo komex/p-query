@@ -30,6 +30,10 @@ abstract class AbstractStructureHandler implements EventSubscriberInterface
      * @var int
      */
     private $position;
+    /**
+     * @var int
+     */
+    private $start;
 
     /**
      * @param StreamEvent $event
@@ -52,6 +56,7 @@ abstract class AbstractStructureHandler implements EventSubscriberInterface
     public function start(LevelEvent $event, $eventName, Parser $parser)
     {
         $this->level = $event->getLevel();
+        $this->start = $event->getPosition();
         $parser->removeListener($eventName, [$this, __FUNCTION__]);
         $parser->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end'], $this->level);
     }
@@ -67,7 +72,7 @@ abstract class AbstractStructureHandler implements EventSubscriberInterface
             $parser->removeListener($eventName, [$this, __FUNCTION__]);
             $parser->dispatch(
                 ParserEvents::NEW_ELEMENT,
-                new NewElementEvent($this->getType(), $this->position, $event->getPosition())
+                new NewElementEvent($this->getType(), $this->position, $this->start, $event->getPosition())
             );
         }
     }

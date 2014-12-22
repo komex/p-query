@@ -91,13 +91,13 @@ class Parser extends EventDispatcher
     {
         switch ($event->getType()) {
             case T_FUNCTION:
-                $this->functions->append([$event->getPosition(), $event->getFinish()]);
+                $this->functions->append([$event->getPosition(), $event->getFinish(), $event->getStart()]);
                 break;
             case T_CLASS:
-                $this->classes->append([$event->getPosition(), $event->getFinish()]);
+                $this->classes->append([$event->getPosition(), $event->getFinish(), $event->getStart()]);
                 break;
             case T_NAMESPACE:
-                $this->namespaces->append([$event->getPosition(), $event->getFinish()]);
+                $this->namespaces->append([$event->getPosition(), $event->getFinish(), $event->getStart()]);
                 break;
         }
     }
