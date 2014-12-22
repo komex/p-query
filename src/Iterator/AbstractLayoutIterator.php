@@ -1,16 +1,16 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Iterator;
+namespace Perk\Iterator;
 
 /**
  * Class AbstractLayoutIterator
  *
- * @package PQuery\Iterator
+ * @package Perk\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 abstract class AbstractLayoutIterator extends AbstractIterator

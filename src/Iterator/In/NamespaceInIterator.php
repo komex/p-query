@@ -1,18 +1,18 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Iterator\In;
+namespace Perk\Iterator\In;
 
-use PQuery\Iterator\NamespaceIterator;
+use Perk\Iterator\NamespaceIterator;
 
 /**
  * Class NamespaceInIterator
  *
- * @package PQuery\Iterator\In
+ * @package Perk\Iterator\In
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class NamespaceInIterator extends NamespaceIterator
@@ -23,8 +23,8 @@ class NamespaceInIterator extends NamespaceIterator
     public function accept()
     {
         list($leftRange, $rightRange) = $this->range;
-        $iterator = $this->getInnerIterator();
+        list($position, $finish) = $this->getInnerIterator()->current();
 
-        return ($iterator->key() > $leftRange && $iterator->current() < $rightRange);
+        return ($position > $leftRange && $finish < $rightRange);
     }
 }

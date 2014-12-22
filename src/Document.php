@@ -1,26 +1,26 @@
 <?php
 /**
- * This file is a part of pQuery project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery;
+namespace Perk;
 
-use PQuery\Handler\ClassHandler;
-use PQuery\Handler\FunctionHandler;
-use PQuery\Handler\LevelHandler;
-use PQuery\Handler\NamespaceHandler;
-use PQuery\Iterator\ClassIterator;
-use PQuery\Iterator\FunctionIterator;
-use PQuery\Iterator\NamespaceIterator;
-use PQuery\Parser\Parser;
-use PQuery\Parser\Stream;
+use Perk\Handler\ClassHandler;
+use Perk\Handler\FunctionHandler;
+use Perk\Handler\LevelHandler;
+use Perk\Handler\NamespaceHandler;
+use Perk\Iterator\ClassIterator;
+use Perk\Iterator\FunctionIterator;
+use Perk\Iterator\NamespaceIterator;
+use Perk\Parser\Parser;
+use Perk\Parser\Stream;
 
 /**
  * Class Document
  *
- * @package PQuery
+ * @package Perk
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class Document

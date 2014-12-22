@@ -1,18 +1,18 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Iterator;
+namespace Perk\Iterator;
 
-use PQuery\Parser\Stream;
+use Perk\Parser\Stream;
 
 /**
  * Class AbstractIterator
  *
- * @package PQuery\Iterator
+ * @package Perk\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 abstract class AbstractIterator extends \FilterIterator

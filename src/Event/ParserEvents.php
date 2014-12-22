@@ -1,16 +1,16 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Event;
+namespace Perk\Event;
 
 /**
  * Class ParserEvents
  *
- * @package PQuery\Handler
+ * @package Perk\Handler
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 final class ParserEvents

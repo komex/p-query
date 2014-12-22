@@ -1,5 +1,5 @@
 {
-    "name": "komex/p-query",
+    "name": "komex/perk",
     "description": "Works with PHP files like jQuery with DOM",
     "minimum-stability": "stable",
     "license": "CC-BY-SA-4.0",
@@ -11,8 +11,8 @@
     ],
     "support": {
         "email": "andrey@kolchenko.me",
-        "issues": "https://github.com/komex/p-query/issues",
-        "source": "https://github.com/komex/p-query.git"
+        "issues": "https://github.com/komex/perk/issues",
+        "source": "https://github.com/komex/perk.git"
     },
     "require": {
         "php": ">=5.4",
@@ -27,8 +27,8 @@
     },
     "autoload": {
         "psr-4": {
-            "PQuery\\": "src/",
-            "Test\\PQuery\\": "tests/"
+            "Perk\\": "src/",
+            "Test\\Perk\\": "tests/"
         }
     }
 }

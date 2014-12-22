@@ -1,23 +1,23 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Handler;
+namespace Perk\Handler;
 
-use PQuery\Event\LevelEvent;
-use PQuery\Event\NewElementEvent;
-use PQuery\Event\ParserEvents;
-use PQuery\Event\StreamEvent;
-use PQuery\Parser\Parser;
+use Perk\Event\LevelEvent;
+use Perk\Event\NewElementEvent;
+use Perk\Event\ParserEvents;
+use Perk\Event\StreamEvent;
+use Perk\Parser\Parser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class AbstractStructureHandler
  *
- * @package PQuery\Handler
+ * @package Perk\Handler
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 abstract class AbstractStructureHandler implements EventSubscriberInterface

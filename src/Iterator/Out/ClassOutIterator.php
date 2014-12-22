@@ -1,18 +1,18 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Iterator\Out;
+namespace Perk\Iterator\Out;
 
-use PQuery\Iterator\ClassIterator;
+use Perk\Iterator\ClassIterator;
 
 /**
  * Class ClassOutIterator
  *
- * @package PQuery\Iterator\Out
+ * @package Perk\Iterator\Out
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class ClassOutIterator extends ClassIterator
@@ -23,8 +23,8 @@ class ClassOutIterator extends ClassIterator
     public function accept()
     {
         list($leftRange, $rightRange) = $this->range;
-        $iterator = $this->getInnerIterator();
+        list($position, $finish) = $this->getInnerIterator()->current();
 
-        return ($iterator->key() < $leftRange && $iterator->current() > $rightRange);
+        return ($position < $leftRange && $finish > $rightRange);
     }
 }

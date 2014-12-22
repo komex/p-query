@@ -1,19 +1,19 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Iterator;
+namespace Perk\Iterator;
 
-use PQuery\Iterator\In\ClassInIterator;
-use PQuery\Iterator\In\FunctionInIterator;
+use Perk\Iterator\In\ClassInIterator;
+use Perk\Iterator\In\FunctionInIterator;
 
 /**
  * Class NamespaceIterator
  *
- * @package PQuery\Iterator
+ * @package Perk\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class NamespaceIterator extends AbstractIterator

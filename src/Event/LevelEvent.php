@@ -1,18 +1,18 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Event;
+namespace Perk\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class LevelEvent
  *
- * @package PQuery\Event
+ * @package Perk\Event
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class LevelEvent extends Event

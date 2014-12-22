@@ -1,16 +1,16 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Parser;
+namespace Perk\Parser;
 
 /**
  * Class Stream
  *
- * @package PQuery\Parser
+ * @package Perk\Parser
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class Stream implements \SeekableIterator, \Countable

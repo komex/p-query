@@ -1,19 +1,19 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Event;
+namespace Perk\Event;
 
-use PQuery\Parser\Stream;
+use Perk\Parser\Stream;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class StreamEvent
  *
- * @package PQuery\Event
+ * @package Perk\Event
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class StreamEvent extends Event

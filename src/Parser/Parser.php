@@ -1,21 +1,21 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Parser;
+namespace Perk\Parser;
 
-use PQuery\Event\StreamEvent;
-use PQuery\Event\ParserEvents;
-use PQuery\Event\NewElementEvent;
+use Perk\Event\StreamEvent;
+use Perk\Event\ParserEvents;
+use Perk\Event\NewElementEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Class Parser
  *
- * @package PQuery
+ * @package Perk
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class Parser extends EventDispatcher

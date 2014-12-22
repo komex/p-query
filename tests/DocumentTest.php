@@ -1,19 +1,19 @@
 <?php
 /**
- * This file is a part of pQuery project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
 namespace Test\PQuery;
 
-use PQuery\Document;
-use PQuery\Parser\Stream;
+use Perk\Document;
+use Perk\Parser\Stream;
 
 /**
  * Class DocumentTest
  *
- * @package Test\PQuery
+ * @package Test\Perk
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class DocumentTest extends \PHPUnit_Framework_TestCase
@@ -29,16 +29,6 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         self::$stream = new Stream(token_get_all(file_get_contents(__FILE__)));
-    }
-
-    public function testSetFinal()
-    {
-        $document = new Document(self::$stream);
-        $class = $document->getClasses();
-        $class->rewind();
-        $class->setAbstract();
-        $class->setFinal();
-        $a = $document->save();
     }
 
     /**

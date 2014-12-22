@@ -1,19 +1,19 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Iterator;
+namespace Perk\Iterator;
 
-use PQuery\Iterator\Out\ClassOutIterator;
-use PQuery\Iterator\Out\NamespaceOutIterator;
+use Perk\Iterator\Out\ClassOutIterator;
+use Perk\Iterator\Out\NamespaceOutIterator;
 
 /**
  * Class FunctionIterator
  *
- * @package PQuery\Iterator
+ * @package Perk\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class FunctionIterator extends AbstractLayoutIterator

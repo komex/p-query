@@ -1,16 +1,16 @@
 <?php
 /**
- * This file is a part of p-query project.
+ * This file is a part of perk project.
  *
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Handler;
+namespace Perk\Handler;
 
 /**
  * Class FunctionHandler
  *
- * @package PQuery\Handler
+ * @package Perk\Handler
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
 class FunctionHandler extends AbstractStructureHandler
