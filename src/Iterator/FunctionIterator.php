@@ -130,6 +130,49 @@ class FunctionIterator extends AbstractLayoutIterator
     }
 
     /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function setContent($content)
+    {
+        list(, $finish, $start) = $this->getInnerIterator()->current();
+        $this->stream->replace($start + 1, ($finish - $start - 1), [[T_STRING, $content]]);
+        $this->getInnerIterator()[$this->getInnerIterator()->key()][1] = $start + 2;
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function appendContent($content)
+    {
+        list(, , $start) = $this->getInnerIterator()->current();
+        $this->stream->insert($start + 1, [[T_STRING, $content]]);
+        $this->shiftPointers($start + 1, 1);
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function prependContent($content)
+    {
+        list(, $finish) = $this->getInnerIterator()->current();
+        $this->stream->insert($finish, [[T_STRING, $content]]);
+        $this->shiftPointers($finish, 1);
+        $this->getInnerIterator()[$this->getInnerIterator()->key()][1] = $finish + 1;
+
+        return $this;
+    }
+
+    /**
      * @return FunctionIterator
      */
     public function current()
