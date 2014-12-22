@@ -30,6 +30,10 @@ class NamespaceHandler implements EventSubscriberInterface
      * @var int
      */
     private $level;
+    /**
+     * @var int
+     */
+    private $start;
 
     /**
      * @inheritdoc
@@ -82,7 +86,7 @@ class NamespaceHandler implements EventSubscriberInterface
     {
         $parser->dispatch(
             ParserEvents::NEW_ELEMENT,
-            new NewElementEvent(T_NAMESPACE, $this->position, $event->getStream()->key())
+            new NewElementEvent(T_NAMESPACE, $this->position, $this->position, $event->getStream()->key())
         );
     }
 
@@ -96,6 +100,7 @@ class NamespaceHandler implements EventSubscriberInterface
     public function start(LevelEvent $event, $eventName, Parser $parser)
     {
         $this->level = $event->getLevel();
+        $this->start = $event->getPosition();
         $parser->removeListener(';', [$this, 'globalNS']);
         $parser->removeListener(ParserEvents::LEVEL_UP, [$this, 'start']);
         $parser->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end']);
@@ -113,7 +118,7 @@ class NamespaceHandler implements EventSubscriberInterface
             $parser->removeListener($eventName, [$this, __FUNCTION__]);
             $parser->dispatch(
                 ParserEvents::NEW_ELEMENT,
-                new NewElementEvent(T_NAMESPACE, $this->position, $event->getPosition())
+                new NewElementEvent(T_NAMESPACE, $this->position, $this->start, $event->getPosition())
             );
         }
     }

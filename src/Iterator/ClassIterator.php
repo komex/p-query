@@ -35,44 +35,6 @@ class ClassIterator extends AbstractLayoutIterator
     }
 
     /**
-     * @param bool $final
-     *
-     * @return $this
-     */
-    public function setFinal($final = true)
-    {
-        $isFinal = $this->isFinal();
-        if ($final === true && $isFinal === false) {
-            list($position) = $this->getInnerIterator()->current();
-            $this->insert($position, [[T_FINAL, 'final'], [T_WHITESPACE, ' ']]);
-            $this->setAbstract(false);
-        } elseif ($final === false && $isFinal === true) {
-            $this->remove($this->stream->key(), 2);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param bool $abstract
-     *
-     * @return $this
-     */
-    public function setAbstract($abstract = true)
-    {
-        $isAbstract = $this->isAbstract();
-        if ($abstract === true && $isAbstract === false) {
-            list($position) = $this->getInnerIterator()->current();
-            $this->insert($position, [[T_ABSTRACT, 'abstract'], [T_WHITESPACE, ' ']]);
-            $this->setFinal(false);
-        } elseif ($abstract === false && $isAbstract === true) {
-            $this->remove($this->stream->key(), 2);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return ClassIterator
      */
     public function current()
@@ -113,10 +75,10 @@ class ClassIterator extends AbstractLayoutIterator
     }
 
     /**
-     * @return \ArrayIterator
+     * @return int
      */
-    protected function getElement()
+    protected function getKey()
     {
-        return $this->elements[T_CLASS];
+        return T_CLASS;
     }
 }
