@@ -54,4 +54,42 @@ abstract class AbstractLayoutIterator extends AbstractIterator
 
         return false;
     }
+
+    /**
+     * @param int $position Stream position
+     * @param array $tokens
+     */
+    protected function insert($position, array $tokens)
+    {
+        $this->stream->insert($position, $tokens);
+        $this->shiftPointers($position, count($tokens));
+    }
+
+    /**
+     * @param int $position Stream position
+     * @param int $length
+     */
+    protected function remove($position, $length)
+    {
+        $this->stream->remove($position, $length);
+        $this->shiftPointers($position, -$length);
+    }
+
+    /**
+     * @param int $position Stream position
+     * @param int $length
+     */
+    protected function shiftPointers($position, $length)
+    {
+        foreach ($this->elements as $list) {
+            $count = ($list->count() - 1);
+            // Without reset().
+            for ($index = $count; $index >= 0; $index--) {
+                list($positionPointer, $finish) = $list[$index];
+                if ($positionPointer >= $position) {
+                    $list[$index] = [$positionPointer + $length, $finish + $length];
+                }
+            }
+        }
+    }
 }

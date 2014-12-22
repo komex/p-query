@@ -43,13 +43,11 @@ class ClassIterator extends AbstractLayoutIterator
     {
         $isFinal = $this->isFinal();
         if ($final === true && $isFinal === false) {
-            list($position, $finish) = $this->getElement()->current();
-            $this->stream->insert($position, [[T_FINAL, 'final'], [T_WHITESPACE, ' ']]);
-            $this->getElement()->offsetSet($this->getInnerIterator()->key(), [$position + 2, $finish + 2]);
-            // @todo Recount positions of all elements.
+            list($position) = $this->getInnerIterator()->current();
+            $this->insert($position, [[T_FINAL, 'final'], [T_WHITESPACE, ' ']]);
             $this->setAbstract(false);
         } elseif ($final === false && $isFinal === true) {
-            $this->stream->remove($this->stream->key(), 2);
+            $this->remove($this->stream->key(), 2);
         }
 
         return $this;
@@ -64,12 +62,11 @@ class ClassIterator extends AbstractLayoutIterator
     {
         $isAbstract = $this->isAbstract();
         if ($abstract === true && $isAbstract === false) {
-            list($position, $finish) = $this->getInnerIterator()->current();
-            $this->stream->insert($position, [[T_ABSTRACT, 'abstract'], [T_WHITESPACE, ' ']]);
-            $this->getElement()->offsetSet($this->getInnerIterator()->key(), [$position + 2, $finish + 2]);
+            list($position) = $this->getInnerIterator()->current();
+            $this->insert($position, [[T_ABSTRACT, 'abstract'], [T_WHITESPACE, ' ']]);
             $this->setFinal(false);
         } elseif ($abstract === false && $isAbstract === true) {
-            $this->stream->remove($this->stream->key(), 2);
+            $this->remove($this->stream->key(), 2);
         }
 
         return $this;
