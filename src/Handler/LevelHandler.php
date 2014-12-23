@@ -10,7 +10,7 @@ namespace Perk\Handler;
 use Perk\Event\LevelEvent;
 use Perk\Event\ParserEvents;
 use Perk\Event\StreamEvent;
-use Perk\Parser\Parser;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -48,12 +48,12 @@ class LevelHandler implements EventSubscriberInterface
     /**
      * @param StreamEvent $event
      * @param string $eventName
-     * @param Parser $parser
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function levelUp(StreamEvent $event, $eventName, Parser $parser)
+    public function levelUp(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $stream = $event->getStream();
-        $parser->dispatch(ParserEvents::LEVEL_UP, $this->level->setPosition($stream->key()));
+        $dispatcher->dispatch(ParserEvents::LEVEL_UP, $this->level->setPosition($stream->key()));
         $this->level->levelUp();
         $stream->next();
     }
@@ -61,12 +61,12 @@ class LevelHandler implements EventSubscriberInterface
     /**
      * @param StreamEvent $event
      * @param $eventName
-     * @param Parser $parser
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function levelDown(StreamEvent $event, $eventName, Parser $parser)
+    public function levelDown(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $stream = $event->getStream();
-        $parser->dispatch(ParserEvents::LEVEL_DOWN, $this->level->levelDown()->setPosition($stream->key()));
+        $dispatcher->dispatch(ParserEvents::LEVEL_DOWN, $this->level->levelDown()->setPosition($stream->key()));
         $stream->next();
     }
 }

@@ -11,7 +11,7 @@ use Perk\Event\LevelEvent;
 use Perk\Event\NewElementEvent;
 use Perk\Event\ParserEvents;
 use Perk\Event\StreamEvent;
-use Perk\Parser\Parser;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -38,39 +38,39 @@ abstract class AbstractStructureHandler implements EventSubscriberInterface
     /**
      * @param StreamEvent $event
      * @param string|int $eventName
-     * @param Parser $parser
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function handle(StreamEvent $event, $eventName, Parser $parser)
+    public function handle(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $stream = $event->getStream();
         $this->position = $stream->key();
         $stream->next();
-        $parser->addListener(ParserEvents::LEVEL_UP, [$this, 'start']);
+        $dispatcher->addListener(ParserEvents::LEVEL_UP, [$this, 'start']);
     }
 
     /**
      * @param LevelEvent $event
      * @param string|int $eventName
-     * @param Parser $parser
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function start(LevelEvent $event, $eventName, Parser $parser)
+    public function start(LevelEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $this->level = $event->getLevel();
         $this->start = $event->getPosition();
-        $parser->removeListener($eventName, [$this, __FUNCTION__]);
-        $parser->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end'], $this->level);
+        $dispatcher->removeListener($eventName, [$this, __FUNCTION__]);
+        $dispatcher->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end'], $this->level);
     }
 
     /**
      * @param LevelEvent $event
      * @param string|int $eventName
-     * @param Parser $parser
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function end(LevelEvent $event, $eventName, Parser $parser)
+    public function end(LevelEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         if ($this->level === $event->getLevel()) {
-            $parser->removeListener($eventName, [$this, __FUNCTION__]);
-            $parser->dispatch(
+            $dispatcher->removeListener($eventName, [$this, __FUNCTION__]);
+            $dispatcher->dispatch(
                 ParserEvents::NEW_ELEMENT,
                 new NewElementEvent($this->getType(), $this->position, $this->start, $event->getPosition())
             );
