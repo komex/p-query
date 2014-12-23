@@ -64,7 +64,7 @@ class NamespaceHandler extends AbstractStructureHandler
      */
     public function finish(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
-        $this->createElement($dispatcher, $event->getStream()->key());
+        $this->createElement($dispatcher, $event->getStream()->count());
         $dispatcher->removeListener($eventName, [$this, __FUNCTION__]);
     }
 

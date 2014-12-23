@@ -25,11 +25,11 @@ class Stream implements \SeekableIterator, \Countable
     private $position = 0;
 
     /**
-     * @param array $tokens
+     * @param string $content
      */
-    public function __construct(array $tokens)
+    public function __construct($content)
     {
-        $this->tokens = array_values($tokens);
+        $this->tokens = token_get_all($content);
     }
 
     /**
@@ -142,6 +142,9 @@ class Stream implements \SeekableIterator, \Countable
     public function seek($position)
     {
         $this->position = $position;
+        if ($this->valid() === false) {
+            throw new \OutOfBoundsException(sprintf('Invalid seek position (%d)', $position));
+        }
     }
 
     /**

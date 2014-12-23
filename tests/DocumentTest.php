@@ -28,7 +28,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$stream = new Stream(token_get_all(file_get_contents(__FILE__)));
+        self::$stream = new Stream(file_get_contents(__FILE__));
     }
 
     /**
