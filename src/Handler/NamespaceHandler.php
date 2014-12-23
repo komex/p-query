@@ -38,7 +38,7 @@ class NamespaceHandler extends AbstractStructureHandler
         if ($this->position !== null) {
             $this->finish($event, $eventName, $dispatcher);
         }
-        $dispatcher->addListener(';', [$this, 'globalNS']);
+        $dispatcher->addListener(';', [$this, 'globalNamespace']);
         parent::handle($event, $eventName, $dispatcher);
     }
 
@@ -49,7 +49,7 @@ class NamespaceHandler extends AbstractStructureHandler
      * @param string|int $eventName
      * @param EventDispatcherInterface $dispatcher
      */
-    public function globalNS(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    public function globalNamespace(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $dispatcher->removeListener($eventName, [$this, __FUNCTION__]);
         $dispatcher->removeListener(ParserEvents::LEVEL_UP, [$this, 'start']);
@@ -77,7 +77,7 @@ class NamespaceHandler extends AbstractStructureHandler
      */
     public function start(LevelEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
-        $dispatcher->removeListener(';', [$this, 'globalNS']);
+        $dispatcher->removeListener(';', [$this, 'globalNamespace']);
         parent::start($event, $eventName, $dispatcher);
     }
 
