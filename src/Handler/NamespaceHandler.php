@@ -8,11 +8,9 @@
 namespace Perk\Handler;
 
 use Perk\Event\LevelEvent;
-use Perk\Event\NewElementEvent;
 use Perk\Event\ParserEvents;
 use Perk\Event\StreamEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class NamespaceHandler
@@ -20,29 +18,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @package Perk\Parser
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class NamespaceHandler implements EventSubscriberInterface
+class NamespaceHandler extends AbstractStructureHandler
 {
-    /**
-     * @var int
-     */
-    private $position;
-    /**
-     * @var int
-     */
-    private $level;
-    /**
-     * @var int
-     */
-    private $start;
-
     /**
      * @inheritdoc
      */
     public static function getSubscribedEvents()
     {
-        return [
-            T_NAMESPACE => 'handle',
-        ];
+        return [T_NAMESPACE => 'handle'];
     }
 
     /**
@@ -52,14 +35,11 @@ class NamespaceHandler implements EventSubscriberInterface
      */
     public function handle(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
-        $stream = $event->getStream();
         if ($this->position !== null) {
             $this->finish($event, $eventName, $dispatcher);
         }
-        $this->position = $stream->key();
-        $dispatcher->addListener(';', [$this, 'globalNS']);
-        $dispatcher->addListener(ParserEvents::LEVEL_UP, [$this, 'start']);
-        $stream->next();
+        $dispatcher->addListener(';', [$this, 'globalNamespace']);
+        parent::handle($event, $eventName, $dispatcher);
     }
 
     /**
@@ -69,12 +49,12 @@ class NamespaceHandler implements EventSubscriberInterface
      * @param string|int $eventName
      * @param EventDispatcherInterface $dispatcher
      */
-    public function globalNS(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    public function globalNamespace(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
-        $dispatcher->removeListener(';', [$this, 'globalNS']);
+        $dispatcher->removeListener($eventName, [$this, __FUNCTION__]);
         $dispatcher->removeListener(ParserEvents::LEVEL_UP, [$this, 'start']);
-        $event->getStream()->next();
         $dispatcher->addListener(ParserEvents::FINISH, [$this, 'finish']);
+        $event->getStream()->next();
     }
 
     /**
@@ -84,10 +64,8 @@ class NamespaceHandler implements EventSubscriberInterface
      */
     public function finish(StreamEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
-        $dispatcher->dispatch(
-            ParserEvents::NEW_ELEMENT,
-            new NewElementEvent(T_NAMESPACE, $this->position, $this->position, $event->getStream()->key())
-        );
+        $this->createElement($dispatcher, $event->getStream()->key());
+        $dispatcher->removeListener($eventName, [$this, __FUNCTION__]);
     }
 
     /**
@@ -99,26 +77,15 @@ class NamespaceHandler implements EventSubscriberInterface
      */
     public function start(LevelEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
-        $this->level = $event->getLevel();
-        $this->start = $event->getPosition();
-        $dispatcher->removeListener(';', [$this, 'globalNS']);
-        $dispatcher->removeListener(ParserEvents::LEVEL_UP, [$this, 'start']);
-        $dispatcher->addListener(ParserEvents::LEVEL_DOWN, [$this, 'end']);
+        $dispatcher->removeListener(';', [$this, 'globalNamespace']);
+        parent::start($event, $eventName, $dispatcher);
     }
 
     /**
-     * @param LevelEvent $event
-     * @param string|int $eventName
-     * @param EventDispatcherInterface $dispatcher
+     * @return int
      */
-    public function end(LevelEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    protected function getType()
     {
-        if ($this->level === $event->getLevel()) {
-            $dispatcher->removeListener($eventName, [$this, __FUNCTION__]);
-            $dispatcher->dispatch(
-                ParserEvents::NEW_ELEMENT,
-                new NewElementEvent(T_NAMESPACE, $this->position, $this->start, $event->getPosition())
-            );
-        }
+        return T_NAMESPACE;
     }
 }
