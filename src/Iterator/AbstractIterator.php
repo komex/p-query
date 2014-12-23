@@ -69,9 +69,9 @@ abstract class AbstractIterator extends \FilterIterator
             $count = ($list->count() - 1);
             // Without reset().
             for ($index = $count; $index >= 0; $index--) {
-                list($positionPointer, $finish) = $list[$index];
+                list($positionPointer, $finish, $start) = $list[$index];
                 if ($positionPointer >= $position) {
-                    $list[$index] = [$positionPointer + $length, $finish + $length];
+                    $list[$index] = [$positionPointer + $length, $finish + $length, $start + $length];
                 }
             }
         }
