@@ -51,7 +51,7 @@ class Parser extends EventDispatcher
         while ($stream->valid() === true) {
             list($code, $value) = $stream->current();
             $eventName = ($code === null ? $value : $code);
-            if ($this->hasListeners($eventName)) {
+            if ($this->hasListeners($eventName) === true) {
                 $this->dispatch($eventName, $event);
             } else {
                 $stream->next();
