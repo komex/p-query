@@ -5,6 +5,25 @@ tools:
     php_sim: true
     php_pdepend: true
     php_analyzer: true
+    external_code_coverage: true
+    php_code_sniffer:
+        enabled: true
+        filter:
+            paths:
+                - src/
+                - tests/
+        config:
+            standard: PSR2
+    php_changetracking: true
+    php_cs_fixer:
+        filter:
+            paths:
+                - src/
+                - tests/
+        config:
+            level: psr2
+    php_mess_detector: true
+    sensiolabs_security_checker: true
 
 checks:
     php:
