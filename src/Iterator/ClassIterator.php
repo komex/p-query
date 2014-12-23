@@ -15,6 +15,7 @@ use Perk\Iterator\Out\NamespaceOutIterator;
  *
  * @package Perk\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
+ * @method ClassIterator current()
  */
 class ClassIterator extends AbstractLayoutIterator
 {
@@ -32,14 +33,6 @@ class ClassIterator extends AbstractLayoutIterator
     public function isFinal()
     {
         return $this->isAttributeExists(T_FINAL, [T_WHITESPACE, T_ABSTRACT]);
-    }
-
-    /**
-     * @return ClassIterator
-     */
-    public function current()
-    {
-        return $this;
     }
 
     /**
@@ -64,14 +57,6 @@ class ClassIterator extends AbstractLayoutIterator
             $this->elements,
             $this->getInnerIterator()->current()
         );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function accept()
-    {
-        return true;
     }
 
     /**

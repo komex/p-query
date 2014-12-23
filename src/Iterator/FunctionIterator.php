@@ -15,6 +15,7 @@ use Perk\Iterator\Out\NamespaceOutIterator;
  *
  * @package Perk\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
+ * @method FunctionIterator current()
  */
 class FunctionIterator extends AbstractLayoutIterator
 {
@@ -170,22 +171,6 @@ class FunctionIterator extends AbstractLayoutIterator
         $this->getInnerIterator()[$this->getInnerIterator()->key()][1] = $finish + 1;
 
         return $this;
-    }
-
-    /**
-     * @return FunctionIterator
-     */
-    public function current()
-    {
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function accept()
-    {
-        return true;
     }
 
     /**

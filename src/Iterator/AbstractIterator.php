@@ -44,6 +44,22 @@ abstract class AbstractIterator extends \FilterIterator
     }
 
     /**
+     * @return $this
+     */
+    public function current()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function accept()
+    {
+        return true;
+    }
+
+    /**
      * @param int $position Stream position
      * @param int $length
      */

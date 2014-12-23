@@ -15,6 +15,7 @@ use Perk\Iterator\In\FunctionInIterator;
  *
  * @package Perk\Iterator
  * @author Andrey Kolchenko <andrey@kolchenko.me>
+ * @method NamespaceIterator current()
  */
 class NamespaceIterator extends AbstractIterator
 {
@@ -62,22 +63,6 @@ class NamespaceIterator extends AbstractIterator
         $this->shiftPointers($position, ($namespaceTokensCount - $currentTokensCount));
 
         return $this;
-    }
-
-    /**
-     * @return NamespaceIterator
-     */
-    public function current()
-    {
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function accept()
-    {
-        return true;
     }
 
     /**
