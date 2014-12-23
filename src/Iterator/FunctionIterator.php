@@ -148,7 +148,7 @@ class FunctionIterator extends AbstractLayoutIterator
      *
      * @return $this
      */
-    public function appendContent($content)
+    public function prependContent($content)
     {
         list(, , $start) = $this->getInnerIterator()->current();
         $this->stream->insert($start + 1, [[T_STRING, $content]]);
@@ -162,7 +162,7 @@ class FunctionIterator extends AbstractLayoutIterator
      *
      * @return $this
      */
-    public function prependContent($content)
+    public function appendContent($content)
     {
         list(, $finish) = $this->getInnerIterator()->current();
         $this->stream->insert($finish, [[T_STRING, $content]]);
