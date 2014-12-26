@@ -41,13 +41,18 @@ class FunctionProcessor implements ProcessorInterface
 
     /**
      * @param Stream $stream
-     * @param \SplStack $attributes
+     * @param \SplQueue $attributes
      *
      * @return string
      */
-    public function takeControl(Stream $stream, \SplStack $attributes)
+    public function takeControl(Stream $stream, \SplQueue $attributes)
     {
-        // TODO: Implement keepControl() method.
+        $content = '';
+        foreach ($attributes as $attribute) {
+            $content .= $attribute[1];
+        }
+
+        return $content . 'function';
     }
 
     /**
@@ -65,7 +70,7 @@ class FunctionProcessor implements ProcessorInterface
      */
     public function onSameLevel(Stream $stream)
     {
-        // TODO: Implement onSameLevel() method.
+        return '';
     }
 
     /**

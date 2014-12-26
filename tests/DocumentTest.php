@@ -7,8 +7,12 @@
 
 namespace Perk\Test;
 
+use Perk\Controller;
 use Perk\Document;
 use Perk\Parser\Stream;
+use Perk\Processor\ClassProcessor;
+use Perk\Processor\FunctionProcessor;
+use Perk\Processor\NamespaceProcessor;
 
 /**
  * Class DocumentTest
@@ -29,6 +33,16 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         self::$stream = new Stream(file_get_contents(__FILE__));
+    }
+
+    public function testController()
+    {
+        $controller = new Controller();
+        $controller->bind(new NamespaceProcessor());
+        $controller->bind(new ClassProcessor());
+        $controller->bind(new FunctionProcessor());
+        // @todo Result is not VALID.
+        $content = $controller->applyChanges(self::$stream);
     }
 
     /**

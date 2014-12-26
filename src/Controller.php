@@ -85,23 +85,46 @@ class Controller
         $content = '';
         $level = 0;
         $levelTracks = [];
-        $stack = new \SplStack();
+        $queue = new \SplQueue();
+        $queue->setIteratorMode(\SplStack::IT_MODE_DELETE);
+        /** @var ProcessorInterface[]|null $expected */
+        $expected = null;
         foreach ($stream as $token) {
             if (is_array($token) === true) {
                 list($code, $value) = $token;
                 if (isset($this->keyWords[$code]) === true) {
-                    $content .= $this->keyWords[$code]->takeControl($stream, $stack);
+                    $content .= $this->keyWords[$code]->takeControl($stream, $queue);
                     if ($this->keyWords[$code]->trackLevel() === true) {
                         if (empty($levelTracks[$level]) === true) {
                             $levelTracks[$level] = [];
                         }
                         array_push($levelTracks[$level], [$this->keyWords[$code], 'onSameLevel']);
                     }
-                    assert('$stack->isEmpty() === true');
-                } elseif (isset($this->stopWords[$code]) === true) {
-                    $stack->push($code);
+                    assert('$queue->isEmpty() === true');
+                } elseif ($expected === null) {
+                    if (isset($this->stopWords[$code]) === true) {
+                        $queue->enqueue($token);
+                        $expected = $this->stopWords[$code];
+                    } else {
+                        $content .= $value;
+                    }
+                } elseif ($code === T_WHITESPACE) {
+                    $queue->enqueue($token);
                 } else {
-                    $content .= $value;
+                    $allowed = false;
+                    foreach ($expected as $processor) {
+                        if (in_array($code, $processor->getStopWords()) === true) {
+                            $queue->enqueue($token);
+                            $allowed = true;
+                            break;
+                        }
+                    }
+                    if ($allowed === false) {
+                        foreach ($queue as $attribute) {
+                            $content .= $attribute[1];
+                        }
+                        $expected = null;
+                    }
                 }
             } else {
                 if ($token === '{') {

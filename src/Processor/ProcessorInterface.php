@@ -31,11 +31,11 @@ interface ProcessorInterface
 
     /**
      * @param Stream $stream
-     * @param \SplStack $attributes
+     * @param \SplQueue $attributes
      *
      * @return string
      */
-    public function takeControl(Stream $stream, \SplStack $attributes);
+    public function takeControl(Stream $stream, \SplQueue $attributes);
 
     /**
      * @return bool
