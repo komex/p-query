@@ -5,18 +5,19 @@
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace Perk\Target;
+namespace Perk\Processor;
 
+use Perk\Controller;
 use Perk\Parser\Stream;
 
 
 /**
- * Interface TargetInterface
+ * Interface ProcessorInterface
  *
- * @package Perk\Target
+ * @package Perk\Processor
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-interface TargetInterface
+interface ProcessorInterface
 {
     /**
      * @return int|string
@@ -35,4 +36,23 @@ interface TargetInterface
      * @return string
      */
     public function takeControl(Stream $stream, \SplStack $attributes);
+
+    /**
+     * @return bool
+     */
+    public function trackLevel();
+
+    /**
+     * @param Stream $stream
+     *
+     * @return $this
+     */
+    public function onSameLevel(Stream $stream);
+
+    /**
+     * @param Controller $controller
+     *
+     * @return $this
+     */
+    public function setController(Controller $controller);
 }

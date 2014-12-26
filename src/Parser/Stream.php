@@ -64,11 +64,11 @@ class Stream implements \SeekableIterator, \Countable
      * Return the current element
      *
      * @link http://php.net/manual/en/iterator.current.php
-     * @return array [$code, $value]
+     * @return array|string
      */
     public function current()
     {
-        return $this->getToken($this->tokens[$this->position]);
+        return $this->tokens[$this->position];
     }
 
     /**
@@ -150,7 +150,7 @@ class Stream implements \SeekableIterator, \Countable
     /**
      * @param array|string $token
      *
-     * @return array
+     * @return array [$code, $value]
      */
     public function getToken($token)
     {
