@@ -21,11 +21,35 @@ class Controller
     /**
      * @var ProcessorInterface[]
      */
-    private $keyWords = [];
+    private $keywords = [];
     /**
      * @var ProcessorInterface[][]
      */
     private $stopWords = [];
+
+    /**
+     * @param int $keyword
+     *
+     * @return bool
+     */
+    public function hasProcessorFor($keyword)
+    {
+        return isset($this->keywords[$keyword]);
+    }
+
+    /**
+     * @param int $keyword
+     *
+     * @return null|ProcessorInterface
+     */
+    public function getProcessorFor($keyword)
+    {
+        if ($this->hasProcessorFor($keyword)) {
+            return $this->keywords[$keyword];
+        } else {
+            return null;
+        }
+    }
 
     /**
      * @param ProcessorInterface $processor
@@ -34,11 +58,11 @@ class Controller
      */
     public function bind(ProcessorInterface $processor)
     {
-        if (empty($this->keyWords[$processor->getKeyWord()]) === false) {
-            $this->unbind($this->keyWords[$processor->getKeyWord()]);
+        if (empty($this->keywords[$processor->getKeyWord()]) === false) {
+            $this->unbind($this->keywords[$processor->getKeyWord()]);
         }
         $processor->setController($this);
-        $this->keyWords[$processor->getKeyWord()] = $processor;
+        $this->keywords[$processor->getKeyWord()] = $processor;
         foreach ($processor->getStopWords() as $word) {
             if (empty($this->stopWords[$word]) === true) {
                 $this->stopWords[$word] = [];
@@ -58,7 +82,7 @@ class Controller
      */
     public function unbind(ProcessorInterface $processor)
     {
-        unset($this->keyWords[$processor->getKeyWord()]);
+        unset($this->keywords[$processor->getKeyWord()]);
         foreach ($processor->getStopWords() as $word) {
             if (empty($this->stopWords[$word]) === false) {
                 $position = array_search($processor, $this->stopWords[$word], true);
@@ -92,13 +116,13 @@ class Controller
         foreach ($stream as $token) {
             if (is_array($token) === true) {
                 list($code, $value) = $token;
-                if (isset($this->keyWords[$code]) === true) {
-                    $content .= $this->keyWords[$code]->takeControl($stream, $queue);
-                    if ($this->keyWords[$code]->trackLevel() === true) {
+                if (isset($this->keywords[$code]) === true) {
+                    $content .= $this->keywords[$code]->takeControl($stream, $queue);
+                    if ($this->keywords[$code]->trackLevel() === true) {
                         if (empty($levelTracks[$level]) === true) {
                             $levelTracks[$level] = [];
                         }
-                        array_push($levelTracks[$level], [$this->keyWords[$code], 'onSameLevel']);
+                        array_push($levelTracks[$level], [$this->keywords[$code], 'onSameLevel']);
                     }
                     assert('$queue->isEmpty() === true');
                 } elseif ($expected === null) {
