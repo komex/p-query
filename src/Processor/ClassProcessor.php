@@ -7,7 +7,6 @@
 
 namespace Perk\Processor;
 
-use Perk\Controller;
 use Perk\Parser\Stream;
 
 /**
@@ -16,12 +15,23 @@ use Perk\Parser\Stream;
  * @package Perk\Processor
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class ClassProcessor implements ProcessorInterface
+class ClassProcessor extends AbstractProcessor
 {
     /**
-     * @var Controller
+     * @return bool
      */
-    private $controller;
+    public function isAbstract()
+    {
+        return $this->checkAttribute(T_ABSTRACT);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinal()
+    {
+        return $this->checkAttribute(T_FINAL);
+    }
 
     /**
      * @return int|string
@@ -47,8 +57,9 @@ class ClassProcessor implements ProcessorInterface
      */
     public function takeControl(Stream $stream, \SplQueue $attributes)
     {
+        $this->attributes = $this->extractAttributes($attributes);
         $content = '';
-        foreach ($attributes as $attribute) {
+        foreach ($this->attributes as $attribute) {
             $content .= $attribute[1];
         }
 
@@ -71,17 +82,5 @@ class ClassProcessor implements ProcessorInterface
     public function onSameLevel(Stream $stream)
     {
         return '';
-    }
-
-    /**
-     * @param Controller $controller
-     *
-     * @return $this
-     */
-    public function setController(Controller $controller)
-    {
-        $this->controller = $controller;
-
-        return $this;
     }
 }

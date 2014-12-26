@@ -7,7 +7,6 @@
 
 namespace Perk\Processor;
 
-use Perk\Controller;
 use Perk\Parser\Stream;
 
 /**
@@ -16,13 +15,8 @@ use Perk\Parser\Stream;
  * @package Perk\Processor
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class FunctionProcessor implements ProcessorInterface
+class FunctionProcessor extends AbstractProcessor
 {
-    /**
-     * @var Controller
-     */
-    private $controller;
-
     /**
      * @return int|string
      */
@@ -40,6 +34,58 @@ class FunctionProcessor implements ProcessorInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isPublic()
+    {
+        if ($this->checkAttribute(T_PUBLIC) === true) {
+            return true;
+        } else {
+            return $this->checkAttribute(T_PROTECTED) === false && $this->checkAttribute(T_PRIVATE) === false;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProtected()
+    {
+        return $this->checkAttribute(T_PROTECTED);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->checkAttribute(T_PRIVATE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatic()
+    {
+        return $this->checkAttribute(T_STATIC);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAbstract()
+    {
+        return $this->checkAttribute(T_ABSTRACT);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinal()
+    {
+        return $this->checkAttribute(T_FINAL);
+    }
+
+    /**
      * @param Stream $stream
      * @param \SplQueue $attributes
      *
@@ -47,6 +93,7 @@ class FunctionProcessor implements ProcessorInterface
      */
     public function takeControl(Stream $stream, \SplQueue $attributes)
     {
+        $this->attributes = $this->extractAttributes($attributes);
         $content = '';
         foreach ($attributes as $attribute) {
             $content .= $attribute[1];
@@ -71,17 +118,5 @@ class FunctionProcessor implements ProcessorInterface
     public function onSameLevel(Stream $stream)
     {
         return '';
-    }
-
-    /**
-     * @param Controller $controller
-     *
-     * @return $this
-     */
-    public function setController(Controller $controller)
-    {
-        $this->controller = $controller;
-
-        return $this;
     }
 }
