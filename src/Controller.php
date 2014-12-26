@@ -114,11 +114,11 @@ class Controller
                     $allowed = false;
                     foreach ($expected as $processor) {
                         if (in_array($code, $processor->getStopWords()) === true) {
-                            $queue->enqueue($token);
                             $allowed = true;
                             break;
                         }
                     }
+                    $queue->enqueue($token);
                     if ($allowed === false) {
                         foreach ($queue as $attribute) {
                             $content .= $attribute[1];

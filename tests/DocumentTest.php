@@ -41,7 +41,6 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         $controller->bind(new NamespaceProcessor());
         $controller->bind(new ClassProcessor());
         $controller->bind(new FunctionProcessor());
-        // @todo Result is not VALID.
         $content = $controller->applyChanges(self::$stream);
     }
 
