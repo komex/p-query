@@ -5,7 +5,7 @@
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace PQuery\Test;
+namespace Perk\Test;
 
 use Perk\Document;
 use Perk\Parser\Stream;
