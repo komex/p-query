@@ -111,7 +111,7 @@ class Controller
                     if (isset($levelTracks[$level]) === true) {
                         foreach ($levelTracks[$level] as $callback) {
                             if (is_callable($callback)) {
-                                call_user_func($callback, $stream);
+                                $content .= call_user_func($callback, $stream);
                             }
                         }
                         unset($levelTracks[$level]);

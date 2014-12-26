@@ -61,7 +61,7 @@ class FunctionProcessor implements ProcessorInterface
     /**
      * @param Stream $stream
      *
-     * @return $this
+     * @return string
      */
     public function onSameLevel(Stream $stream)
     {

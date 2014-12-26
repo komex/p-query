@@ -61,11 +61,11 @@ class NamespaceProcessor implements ProcessorInterface
     /**
      * @param Stream $stream
      *
-     * @return $this
+     * @return string
      */
     public function onSameLevel(Stream $stream)
     {
-        // TODO: Implement onSameLevel() method.
+        return '';
     }
 
     /**
