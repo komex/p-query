@@ -69,20 +69,4 @@ abstract class AbstractProcessor implements ProcessorInterface
 
         return false;
     }
-
-    /**
-     * @param \SplQueue $attributes
-     *
-     * @return array
-     */
-    protected function extractAttributes(\SplQueue $attributes)
-    {
-        $tokens = [];
-        foreach ($attributes as $attribute) {
-            unset($attribute[2]);
-            array_push($tokens, $attribute);
-        }
-
-        return $tokens;
-    }
 }

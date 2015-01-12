@@ -87,19 +87,20 @@ class FunctionProcessor extends AbstractProcessor
 
     /**
      * @param Stream $stream
-     * @param \SplQueue $attributes
+     * @param array $attributes
      *
      * @return string
      */
-    public function takeControl(Stream $stream, \SplQueue $attributes)
+    public function takeControl(Stream $stream, array $attributes)
     {
-        $this->attributes = $this->extractAttributes($attributes);
+        list(, $current) = $stream->current();
+        $this->attributes = $attributes;
         $content = '';
         foreach ($attributes as $attribute) {
             $content .= $attribute[1];
         }
 
-        return $content . 'function';
+        return $content . $current;
     }
 
     /**

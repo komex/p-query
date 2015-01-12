@@ -115,8 +115,7 @@ class Controller
         $content = '';
         $level = 0;
         $levelTracks = [];
-        $queue = new \SplQueue();
-        $queue->setIteratorMode(\SplStack::IT_MODE_DELETE);
+        $queue = [];
         /** @var ProcessorInterface[]|null $expected */
         $expected = null;
         foreach ($stream as $token) {
@@ -124,22 +123,22 @@ class Controller
                 list($code, $value) = $token;
                 if (isset($this->keywords[$code]) === true) {
                     $content .= $this->keywords[$code]->takeControl($stream, $queue);
+                    $queue = [];
                     if ($this->keywords[$code]->trackLevel() === true) {
                         if (empty($levelTracks[$level]) === true) {
                             $levelTracks[$level] = [];
                         }
                         array_push($levelTracks[$level], [$this->keywords[$code], 'onSameLevel']);
                     }
-                    assert('$queue->isEmpty() === true');
                 } elseif ($expected === null) {
                     if (isset($this->attributes[$code]) === true) {
-                        $queue->enqueue($token);
+                        array_push($queue, $token);
                         $expected = $this->attributes[$code];
                     } else {
                         $content .= $value;
                     }
                 } elseif ($code === T_WHITESPACE) {
-                    $queue->enqueue($token);
+                    array_push($queue, $token);
                 } else {
                     $allowed = false;
                     foreach ($expected as $processor) {
@@ -148,12 +147,13 @@ class Controller
                             break;
                         }
                     }
-                    $queue->enqueue($token);
+                    array_push($queue, $token);
                     if ($allowed === false) {
                         foreach ($queue as $attribute) {
                             $content .= $attribute[1];
                         }
                         $expected = null;
+                        $queue = [];
                     }
                 }
             } else {
