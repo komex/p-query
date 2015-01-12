@@ -47,6 +47,7 @@ class NamespaceProcessor implements ProcessorInterface
      */
     public function takeControl(Stream $stream, \SplQueue $attributes)
     {
+        $this->controller->setLayout($this);
         $content = '';
         foreach ($attributes as $attribute) {
             $content .= $attribute[1];

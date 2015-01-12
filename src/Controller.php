@@ -25,30 +25,26 @@ class Controller
     /**
      * @var ProcessorInterface[][]
      */
-    private $stopWords = [];
+    private $attributes = [];
+    /**
+     * @var ProcessorInterface
+     */
+    private $layout;
 
     /**
-     * @param int $keyword
-     *
-     * @return bool
+     * @return ProcessorInterface
      */
-    public function hasProcessorFor($keyword)
+    public function getLayout()
     {
-        return isset($this->keywords[$keyword]);
+        return $this->layout;
     }
 
     /**
-     * @param int $keyword
-     *
-     * @return null|ProcessorInterface
+     * @param ProcessorInterface|null $layout
      */
-    public function getProcessorFor($keyword)
+    public function setLayout(ProcessorInterface $layout = null)
     {
-        if ($this->hasProcessorFor($keyword)) {
-            return $this->keywords[$keyword];
-        } else {
-            return null;
-        }
+        $this->layout = $layout;
     }
 
     /**
@@ -64,11 +60,11 @@ class Controller
         $processor->setController($this);
         $this->keywords[$processor->getKeyWord()] = $processor;
         foreach ($processor->getStopWords() as $word) {
-            if (empty($this->stopWords[$word]) === true) {
-                $this->stopWords[$word] = [];
+            if (empty($this->attributes[$word]) === true) {
+                $this->attributes[$word] = [];
             }
-            if (in_array($processor, $this->stopWords[$word], true) === false) {
-                array_push($this->stopWords[$word], $processor);
+            if (in_array($processor, $this->attributes[$word], true) === false) {
+                array_push($this->attributes[$word], $processor);
             }
         }
 
@@ -84,13 +80,13 @@ class Controller
     {
         unset($this->keywords[$processor->getKeyWord()]);
         foreach ($processor->getStopWords() as $word) {
-            if (empty($this->stopWords[$word]) === false) {
-                $position = array_search($processor, $this->stopWords[$word], true);
+            if (empty($this->attributes[$word]) === false) {
+                $position = array_search($processor, $this->attributes[$word], true);
                 if ($position !== false) {
-                    if (count($this->stopWords[$word]) === 1) {
-                        unset($this->stopWords[$word]);
+                    if (count($this->attributes[$word]) === 1) {
+                        unset($this->attributes[$word]);
                     } else {
-                        unset($this->stopWords[$word][$position]);
+                        unset($this->attributes[$word][$position]);
                     }
                 }
             }
@@ -126,9 +122,9 @@ class Controller
                     }
                     assert('$queue->isEmpty() === true');
                 } elseif ($expected === null) {
-                    if (isset($this->stopWords[$code]) === true) {
+                    if (isset($this->attributes[$code]) === true) {
                         $queue->enqueue($token);
-                        $expected = $this->stopWords[$code];
+                        $expected = $this->attributes[$code];
                     } else {
                         $content .= $value;
                     }

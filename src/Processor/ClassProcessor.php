@@ -58,6 +58,7 @@ class ClassProcessor extends AbstractProcessor
     public function takeControl(Stream $stream, \SplQueue $attributes)
     {
         $this->attributes = $this->extractAttributes($attributes);
+        $this->controller->setLayout($this);
         $content = '';
         foreach ($this->attributes as $attribute) {
             $content .= $attribute[1];
