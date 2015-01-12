@@ -25,6 +25,22 @@ abstract class AbstractProcessor implements ProcessorInterface
      * @var array
      */
     protected $attributes = [];
+    /**
+     * @var \Closure
+     */
+    protected $handler;
+
+    /**
+     * @param \Closure $handler
+     *
+     * @return $this
+     */
+    public function setHandler(\Closure $handler)
+    {
+        $this->handler = $handler;
+
+        return $this;
+    }
 
     /**
      * @param Controller $controller

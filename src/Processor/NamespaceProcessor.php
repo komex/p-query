@@ -22,6 +22,10 @@ class NamespaceProcessor implements ProcessorInterface
      * @var Controller
      */
     private $controller;
+    /**
+     * @var \Closure
+     */
+    private $handler;
 
     /**
      * @return int|string
@@ -37,6 +41,16 @@ class NamespaceProcessor implements ProcessorInterface
     public function getStopWords()
     {
         return [];
+    }
+
+    /**
+     * @param \Closure $handler
+     *
+     * @return $this
+     */
+    public function setHandler(\Closure $handler)
+    {
+        $this->handler = $handler;
     }
 
     /**

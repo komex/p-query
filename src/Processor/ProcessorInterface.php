@@ -55,4 +55,11 @@ interface ProcessorInterface
      * @return $this
      */
     public function setController(Controller $controller);
+
+    /**
+     * @param \Closure $handler
+     *
+     * @return $this
+     */
+    public function setHandler(\Closure $handler);
 }
