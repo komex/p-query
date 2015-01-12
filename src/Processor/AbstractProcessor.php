@@ -8,6 +8,7 @@
 namespace Perk\Processor;
 
 use Perk\Controller;
+use Perk\Parser\Stream;
 
 /**
  * Class AbstractProcessor
@@ -29,6 +30,27 @@ abstract class AbstractProcessor implements ProcessorInterface
      * @var \Closure
      */
     protected $handler;
+
+    /**
+     * @param Stream $stream
+     * @param array $attributes
+     *
+     * @return string
+     */
+    public function takeControl(Stream $stream, array $attributes)
+    {
+        $this->attributes = $attributes;
+        list(, $current) = $stream->current();
+        if ($this->handler !== null) {
+            call_user_func($this->handler, $this);
+        }
+        $content = '';
+        foreach ($this->attributes as $attribute) {
+            $content .= $attribute[1];
+        }
+
+        return $content . $current;
+    }
 
     /**
      * @param \Closure $handler

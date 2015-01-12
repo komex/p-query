@@ -86,24 +86,6 @@ class FunctionProcessor extends AbstractProcessor
     }
 
     /**
-     * @param Stream $stream
-     * @param array $attributes
-     *
-     * @return string
-     */
-    public function takeControl(Stream $stream, array $attributes)
-    {
-        list(, $current) = $stream->current();
-        $this->attributes = $attributes;
-        $content = '';
-        foreach ($attributes as $attribute) {
-            $content .= $attribute[1];
-        }
-
-        return $content . $current;
-    }
-
-    /**
      * @return bool
      */
     public function trackLevel()
