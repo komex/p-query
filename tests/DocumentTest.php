@@ -8,7 +8,6 @@
 namespace Perk\Test;
 
 use Perk\Controller;
-use Perk\Document;
 use Perk\Parser\Stream;
 use Perk\Processor\ClassProcessor;
 use Perk\Processor\FunctionProcessor;
@@ -42,43 +41,5 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         $controller->bind(new ClassProcessor());
         $controller->bind(new FunctionProcessor());
         $content = $controller->applyChanges(self::$stream);
-    }
-
-    /**
-     * Test getNamespace
-     */
-    public function testNamespace()
-    {
-        $document = new Document(self::$stream);
-        $namespaces = $document->getNamespaces();
-        $this->assertCount(1, $namespaces);
-        foreach ($namespaces as $namespace) {
-            $this->assertSame(__NAMESPACE__, $namespace->getName());
-            $classes = $namespace->getClasses();
-            $this->assertCount(1, $classes);
-            foreach ($classes as $class) {
-                $this->assertSame(__CLASS__, $namespace->getName() . '\\' . $class->getName());
-                $functions = $class->getFunctions();
-                $this->assertCount(3, $functions);
-                foreach ($functions as $function) {
-                    $this->assertSame('setUpBeforeClass', $function->getName());
-                    $this->assertTrue($function->isStatic());
-                    $this->assertTrue($function->isPublic());
-                    $this->assertFalse($function->isProtected());
-                    $this->assertFalse($function->isPrivate());
-                    $this->assertFalse($function->isAbstract());
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * Test save method
-     */
-    public function testSave()
-    {
-        $document = new Document(self::$stream);
-        $this->assertSame(file_get_contents(__FILE__), $document->save());
     }
 }
