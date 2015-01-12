@@ -53,6 +53,21 @@ class Document
     }
 
     /**
+     * @param \Closure $handler
+     *
+     * @return $this
+     */
+    public function setFunctionHandler(\Closure $handler)
+    {
+        $processor = $this->controller->getProcessorForKeyWord(T_FUNCTION);
+        if ($processor instanceof ProcessorInterface) {
+            $processor->setHandler($handler);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param Stream $stream
      *
      * @return string

@@ -7,6 +7,7 @@
 
 namespace Perk\Processor;
 
+use Perk\Layout\ClassReadInterface;
 use Perk\Parser\Stream;
 
 /**
@@ -15,7 +16,7 @@ use Perk\Parser\Stream;
  * @package Perk\Processor
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class ClassProcessor extends AbstractProcessor
+class ClassProcessor extends AbstractProcessor implements ClassReadInterface
 {
     /**
      * @return bool
@@ -31,6 +32,14 @@ class ClassProcessor extends AbstractProcessor
     public function isFinal()
     {
         return $this->checkAttribute(T_FINAL);
+    }
+
+    /**
+     * @return ProcessorInterface
+     */
+    public function getLayout()
+    {
+        return $this->controller->getLayout();
     }
 
     /**

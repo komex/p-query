@@ -8,8 +8,8 @@
 namespace Perk\Test;
 
 use Perk\Document;
+use Perk\Layout\ClassReadInterface;
 use Perk\Parser\Stream;
-use Perk\Processor\ClassProcessor;
 
 /**
  * Class DocumentTest
@@ -36,8 +36,8 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     {
         $document = new Document();
         $document->setClassHandler(
-            function (ClassProcessor $a) {
-
+            function (ClassReadInterface $class) {
+                $layout = $class->getLayout();
             }
         );
         $content = $document->applyChanges(self::$stream);
