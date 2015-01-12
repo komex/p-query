@@ -48,6 +48,16 @@ class Controller
     }
 
     /**
+     * @param int $keyword
+     *
+     * @return ProcessorInterface
+     */
+    public function getProcessorForKeyWord($keyword)
+    {
+        return $this->keywords[$keyword];
+    }
+
+    /**
      * @param ProcessorInterface $processor
      *
      * @return $this
