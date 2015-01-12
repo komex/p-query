@@ -8,6 +8,10 @@
 namespace Perk;
 
 use Perk\Parser\Stream;
+use Perk\Processor\ClassProcessor;
+use Perk\Processor\FunctionProcessor;
+use Perk\Processor\NamespaceProcessor;
+use Perk\Processor\ProcessorInterface;
 
 /**
  * Class Document
@@ -18,28 +22,43 @@ use Perk\Parser\Stream;
 class Document
 {
     /**
-     * @var Stream
+     * @var Controller
      */
-    private $stream;
+    private $controller;
 
     /**
-     * @param Stream $stream
+     * @param Init document
      */
-    public function __construct(Stream $stream)
+    public function __construct()
     {
-        $this->stream = $stream;
+        $this->controller = new Controller();
+        $this->controller->bind(new NamespaceProcessor());
+        $this->controller->bind(new ClassProcessor());
+        $this->controller->bind(new FunctionProcessor());
     }
 
     /**
-     * @return string
+     * @param \Closure $handler
+     *
+     * @return $this
      */
-    public function save()
+    public function setClassHandler(\Closure $handler)
     {
-        $content = '';
-        foreach ($this->stream as $token) {
-            $content .= $token[1];
+        $processor = $this->controller->getProcessorForKeyWord(T_CLASS);
+        if ($processor instanceof ProcessorInterface) {
+            $processor->setHandler($handler);
         }
 
-        return $content;
+        return $this;
+    }
+
+    /**
+     * @param Stream $stream
+     *
+     * @return string
+     */
+    public function applyChanges(Stream $stream)
+    {
+        return $this->controller->applyChanges($stream);
     }
 }
