@@ -20,15 +20,15 @@ class MethodParser implements ParserInterface
      */
     private $lexer;
     /**
-     * @var array
+     * @var callable[]
      */
     private $tokensMap = [];
     /**
-     * @var array
+     * @var callable[]
      */
     private $valuesMap = [];
     /**
-     * @var string
+     * @var callable
      */
     private $defaultHandler;
     /**
@@ -69,7 +69,7 @@ class MethodParser implements ParserInterface
     }
 
     /**
-     * @param $token
+     * @param array|string $token
      *
      * @return int
      */
@@ -177,7 +177,7 @@ class MethodParser implements ParserInterface
     }
 
     /**
-     * @param array|int $token
+     * @param array|string $token
      *
      * @return int
      */
@@ -187,7 +187,10 @@ class MethodParser implements ParserInterface
             $this->level++;
         } elseif ($token === ')') {
             if ($this->level === 0) {
-                $this->valuesMap = ['{' => [$this, 'startContent']];
+                $this->lexer->registerLevelHandlers([$this, 'startContent'], [$this, 'finishContent']);
+                $this->valuesMap = [];
+                $this->tokensMap = [];
+                $this->level = 0;
                 $this->defaultHandler = null;
             } else {
                 $this->level--;
@@ -204,10 +207,28 @@ class MethodParser implements ParserInterface
      */
     public function startContent()
     {
-        $this->valuesMap = [];
-        $this->tokensMap = [];
-        $this->level = 0;
+        return self::ACCEPTED;
+    }
+
+    /**
+     * Found finish content token
+     *
+     * @return int
+     */
+    public function finishContent()
+    {
+        $this->reset();
 
         return self::ACCEPTED;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $this->reset();
+
+        return '';
     }
 }

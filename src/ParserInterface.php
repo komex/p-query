@@ -23,13 +23,9 @@ interface ParserInterface
      * Unexpected token. Skip it.
      */
     const ABSTAIN = 2;
-    /**
-     * Unexpected token. Lexer will invoke reset().
-     */
-    const INVALID = 3;
 
     /**
-     * @param $token
+     * @param array|string $token
      *
      * @return int
      */
@@ -49,4 +45,9 @@ interface ParserInterface
      * @param Lexer $lexer
      */
     public function setLexer(Lexer $lexer);
+
+    /**
+     * @return string
+     */
+    public function __toString();
 }

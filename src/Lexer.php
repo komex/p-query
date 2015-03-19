@@ -24,6 +24,18 @@ class Lexer
      * @var ParserInterface[]
      */
     private $parsers = [];
+    /**
+     * @var int
+     */
+    private $level = 0;
+    /**
+     * @var callable
+     */
+    private $levelUpHandler;
+    /**
+     * @var callable[]
+     */
+    private $levelDownHandlers = [];
 
     /**
      * @param ParserInterface $parser
@@ -63,6 +75,20 @@ class Lexer
     }
 
     /**
+     * @param callable $levelUp
+     * @param callable $levelDown
+     */
+    public function registerLevelHandlers(callable $levelUp = null, callable $levelDown = null)
+    {
+        if ($levelUp !== null) {
+            $this->levelUpHandler = $levelUp;
+        }
+        if ($levelDown !== null) {
+            $this->levelDownHandlers[$this->level] = $levelDown;
+        }
+    }
+
+    /**
      * @param array $tokens
      */
     public function process(array $tokens)
@@ -81,6 +107,7 @@ class Lexer
                     continue;
                 }
             } else {
+                $this->checkLevelChange($token);
                 $chunk = $token;
             }
             foreach ($this->parsers as $parser) {
@@ -91,6 +118,28 @@ class Lexer
                 } else {
                     $accepted = true;
                     $cachedContent .= $chunk;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string $token
+     */
+    private function checkLevelChange($token)
+    {
+        if ($this->levelUpHandler !== null || empty($this->levelDownHandlers) === false) {
+            if ($token === '{') {
+                $this->level++;
+                if ($this->levelUpHandler !== null) {
+                    call_user_func($this->levelUpHandler);
+                    $this->levelUpHandler = null;
+                }
+            } elseif ($token === '}') {
+                $this->level--;
+                if (isset($this->levelDownHandlers[$this->level]) === true) {
+                    call_user_func($this->levelDownHandlers[$this->level]);
+                    unset($this->levelDownHandlers[$this->level]);
                 }
             }
         }
