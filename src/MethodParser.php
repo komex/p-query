@@ -16,6 +16,10 @@ namespace Perk;
 class MethodParser implements ParserInterface
 {
     /**
+     * @var Lexer
+     */
+    private $lexer;
+    /**
      * @var array
      */
     private $tokensMap = [];
@@ -24,7 +28,7 @@ class MethodParser implements ParserInterface
      */
     private $valuesMap = [];
     /**
-     * @var callable
+     * @var string
      */
     private $defaultHandler;
     /**
@@ -49,6 +53,22 @@ class MethodParser implements ParserInterface
     }
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'method';
+    }
+
+    /**
+     * @param Lexer $lexer
+     */
+    public function setLexer(Lexer $lexer)
+    {
+        $this->lexer = $lexer;
+    }
+
+    /**
      * @param $token
      *
      * @return int
@@ -65,19 +85,33 @@ class MethodParser implements ParserInterface
                 $handler = $this->valuesMap[$token];
             }
         }
-        if (is_callable($handler) === true) {
-            call_user_func($handler, $token);
-
-            return self::TOKEN_ACCEPTED;
+        if ($handler !== null) {
+            return call_user_func($handler, $token);
         } else {
-            $this->reset();
-
-            return self::TOKEN_UNKNOWN;
+            return self::ABSTAIN;
         }
     }
 
     /**
+     * Reset state.
+     */
+    public function reset()
+    {
+        $this->tokensMap = array_fill_keys(
+            [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC, T_ABSTRACT, T_FINAL],
+            [$this, 'attributes']
+        );
+        $this->tokensMap[T_FUNCTION] = [$this, 'keyWord'];
+        $this->valuesMap = [];
+        $this->attributes = [];
+        $this->name = null;
+        $this->level = 0;
+    }
+
+    /**
      * @param array $token
+     *
+     * @return int
      */
     public function attributes(array $token)
     {
@@ -97,32 +131,40 @@ class MethodParser implements ParserInterface
         } elseif ($attribute === T_FINAL) {
             unset($this->tokensMap[T_ABSTRACT]);
         }
+
+        return self::ACCEPTED;
     }
 
     /**
      * @param array $token
+     *
+     * @return int
      */
     public function name(array $token)
     {
         $this->name = $token[1];
         unset($this->tokensMap[T_STRING]);
+
+        return self::ACCEPTED;
     }
 
     /**
      * Found function key word. Update maps.
+     *
+     * @return int
      */
     public function keyWord()
     {
-        $this->tokensMap = [
-            T_STRING => [$this, 'name'],
-        ];
-        $this->valuesMap = [
-            '(' => [$this, 'startArgumentsBlock'],
-        ];
+        $this->tokensMap = [T_STRING => [$this, 'name']];
+        $this->valuesMap = ['(' => [$this, 'startArgumentsBlock']];
+
+        return self::ACCEPTED;
     }
 
     /**
      * Set default handler for arguments block.
+     *
+     * @return int
      */
     public function startArgumentsBlock()
     {
@@ -130,60 +172,42 @@ class MethodParser implements ParserInterface
         $this->valuesMap = [];
         $this->level = 0;
         $this->defaultHandler = [$this, 'arguments'];
+
+        return self::ACCEPTED;
     }
 
     /**
      * @param array|int $token
+     *
+     * @return int
      */
     public function arguments($token)
     {
-        if (is_array($token) === false) {
-            switch ($token) {
-                case '(':
-                    $this->level++;
-                    break;
-                case ')':
-                    if ($this->level === 0) {
-                        $this->valuesMap = [
-                            '{' => [$this, 'startContent'],
-                        ];
-                        $this->defaultHandler = null;
-                    } else {
-                        $this->level--;
-                    }
-                    break;
+        if ($token === '(') {
+            $this->level++;
+        } elseif ($token === ')') {
+            if ($this->level === 0) {
+                $this->valuesMap = ['{' => [$this, 'startContent']];
+                $this->defaultHandler = null;
+            } else {
+                $this->level--;
             }
         }
+
+        return self::ACCEPTED;
     }
 
     /**
      * Found start content token
+     *
+     * @return int
      */
     public function startContent()
     {
         $this->valuesMap = [];
         $this->tokensMap = [];
         $this->level = 0;
-        $this->defaultHandler = [$this, 'content'];
-    }
 
-    /**
-     * Reset state.
-     */
-    private function reset()
-    {
-        $this->tokensMap = [
-            T_PUBLIC => [$this, 'attributes'],
-            T_PRIVATE => [$this, 'attributes'],
-            T_PROTECTED => [$this, 'attributes'],
-            T_STATIC => [$this, 'attributes'],
-            T_ABSTRACT => [$this, 'attributes'],
-            T_FINAL => [$this, 'attributes'],
-            T_FUNCTION => [$this, 'keyWord'],
-        ];
-        $this->valuesMap = [];
-        $this->attributes = [];
-        $this->name = null;
-        $this->level = 0;
+        return self::ACCEPTED;
     }
 }

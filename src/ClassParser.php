@@ -56,7 +56,7 @@ class ClassParser implements ParserInterface
     public function init($token)
     {
         if (is_array($token) === false) {
-            return self::TOKEN_UNKNOWN;
+            return self::ABSTAIN;
         }
         $token = $token[0];
         if ($token === T_CLASS) {
@@ -65,10 +65,10 @@ class ClassParser implements ParserInterface
             $this->attributes[] = $token;
             $this->handler = [$this, 'attributes'];
         } else {
-            return self::TOKEN_UNKNOWN;
+            return self::ABSTAIN;
         }
 
-        return self::TOKEN_ACCEPTED;
+        return self::ACCEPTED;
     }
 
     /**
@@ -80,7 +80,7 @@ class ClassParser implements ParserInterface
     {
         $this->handler = [$this, 'name'];
 
-        return $token[0] === T_CLASS ? self::TOKEN_ACCEPTED : self::TOKEN_UNKNOWN;
+        return $token[0] === T_CLASS ? self::ACCEPTED : self::ABSTAIN;
     }
 
     /**
@@ -94,9 +94,9 @@ class ClassParser implements ParserInterface
             $this->className = $token[1];
             $this->handler = [$this, 'hierarchy'];
 
-            return self::TOKEN_ACCEPTED;
+            return self::ACCEPTED;
         } else {
-            return self::TOKEN_UNKNOWN;
+            return self::ABSTAIN;
         }
     }
 
@@ -112,17 +112,17 @@ class ClassParser implements ParserInterface
             if ($token === T_EXTENDS) {
                 $this->handler = [$this, 'extend'];
 
-                return self::TOKEN_ACCEPTED;
+                return self::ACCEPTED;
             } elseif ($token === T_IMPLEMENTS) {
                 $this->handler = [$this, 'implement'];
 
-                return self::TOKEN_ACCEPTED;
+                return self::ACCEPTED;
             }
         } elseif ($token === '{') {
             $this->handler = [$this, 'levelUp'];
         }
 
-        return self::TOKEN_UNKNOWN;
+        return self::ABSTAIN;
     }
 
     /**
@@ -139,15 +139,15 @@ class ClassParser implements ParserInterface
             } elseif ($token === T_IMPLEMENTS) {
                 $this->handler = [$this, 'implement'];
             } else {
-                return self::TOKEN_UNKNOWN;
+                return self::ABSTAIN;
             }
         } elseif ($token === '{') {
             $this->handler = [$this, 'levelUp'];
         } else {
-            return self::TOKEN_UNKNOWN;
+            return self::ABSTAIN;
         }
 
-        return self::TOKEN_ACCEPTED;
+        return self::ACCEPTED;
     }
 
     /**
@@ -162,7 +162,7 @@ class ClassParser implements ParserInterface
             if ($token === T_STRING || $token === T_NS_SEPARATOR) {
                 $this->tmpImplement .= $value;
             } else {
-                return self::TOKEN_UNKNOWN;
+                return self::ABSTAIN;
             }
         } elseif ($token === '{') {
             $this->implements[] = $this->tmpImplement;
@@ -172,10 +172,10 @@ class ClassParser implements ParserInterface
             $this->implements[] = $this->tmpImplement;
             $this->tmpImplement = '';
         } else {
-            return self::TOKEN_UNKNOWN;
+            return self::ABSTAIN;
         }
 
-        return self::TOKEN_ACCEPTED;
+        return self::ACCEPTED;
     }
 
     /**
@@ -183,7 +183,7 @@ class ClassParser implements ParserInterface
      */
     public function levelUp()
     {
-        return self::TOKEN_UNKNOWN;
+        return self::ABSTAIN;
     }
 
     /**

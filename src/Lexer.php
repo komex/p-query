@@ -16,24 +16,42 @@ namespace Perk;
 class Lexer
 {
     /**
-     * @var ClassParser
-     */
-    private $parser;
-    /**
      * @var string
      */
     private $content = '';
+
     /**
-     * @var string
+     * @var ParserInterface[]
      */
-    private $cachedContent = '';
+    private $parsers = [];
 
     /**
      * @param ParserInterface $parser
      */
-    public function setParser(ParserInterface $parser)
+    public function addParser(ParserInterface $parser)
     {
-        $this->parser = $parser;
+        $this->parsers[$parser->getName()] = $parser;
+        $parser->setLexer($this);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return ParserInterface
+     */
+    public function getParser($name)
+    {
+        return $this->parsers[$name];
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasParser($name)
+    {
+        return isset($this->parsers[$name]);
     }
 
     /**
@@ -50,6 +68,7 @@ class Lexer
     public function process(array $tokens)
     {
         $accepted = false;
+        $cachedContent = '';
         foreach ($tokens as $token) {
             if (is_array($token) === true) {
                 $chunk = $token[1];
@@ -57,20 +76,22 @@ class Lexer
                     if ($accepted === true) {
                         $this->content .= $chunk;
                     } else {
-                        $this->cachedContent .= $chunk;
+                        $cachedContent .= $chunk;
                     }
                     continue;
                 }
             } else {
                 $chunk = $token;
             }
-            if ($this->parser->parse($token) === ParserInterface::TOKEN_UNKNOWN) {
-                $accepted = false;
-                $this->content .= $chunk;
-                $this->cachedContent = '';
-            } else {
-                $accepted = true;
-                $this->cachedContent .= $chunk;
+            foreach ($this->parsers as $parser) {
+                if ($parser->parse($token) === ParserInterface::ABSTAIN) {
+                    $accepted = false;
+                    $this->content .= $chunk;
+                    $cachedContent = '';
+                } else {
+                    $accepted = true;
+                    $cachedContent .= $chunk;
+                }
             }
         }
     }

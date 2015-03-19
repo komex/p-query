@@ -15,8 +15,18 @@ namespace Perk;
  */
 interface ParserInterface
 {
-    const TOKEN_UNKNOWN = 1;
-    const TOKEN_ACCEPTED = 2;
+    /**
+     * Token was accepted.
+     */
+    const ACCEPTED = 1;
+    /**
+     * Unexpected token. Skip it.
+     */
+    const ABSTAIN = 2;
+    /**
+     * Unexpected token. Lexer will invoke reset().
+     */
+    const INVALID = 3;
 
     /**
      * @param $token
@@ -24,4 +34,19 @@ interface ParserInterface
      * @return int
      */
     public function parse($token);
+
+    /**
+     * Reset state.
+     */
+    public function reset();
+
+    /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @param Lexer $lexer
+     */
+    public function setLexer(Lexer $lexer);
 }

@@ -7,7 +7,6 @@
 
 namespace Perk\Test;
 
-use Perk\ClassParser;
 use Perk\Lexer;
 use Perk\MethodParser;
 
@@ -24,7 +23,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $tokens = token_get_all(file_get_contents('vendor/phpunit/phpunit/src/Framework/TestSuite.php'));
 //        $tokens = token_get_all(file_get_contents('vendor/phpmd/phpmd/src/main/php/PHPMD/AbstractNode.php'));
         $lexer = new Lexer();
-        $lexer->setParser(new MethodParser());
+        $lexer->addParser(new MethodParser());
         $lexer->process($tokens);
         $a = $lexer->getContent();
     }
