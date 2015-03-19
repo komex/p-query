@@ -23,6 +23,10 @@ interface ParserInterface
      * Unexpected token. Skip it.
      */
     const ABSTAIN = 2;
+    /**
+     * Block was successful parsed.
+     */
+    const PARSED = 3;
 
     /**
      * @param array|string $token

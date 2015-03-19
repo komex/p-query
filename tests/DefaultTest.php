@@ -23,7 +23,13 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $tokens = token_get_all(file_get_contents('vendor/phpunit/phpunit/src/Framework/TestSuite.php'));
 //        $tokens = token_get_all(file_get_contents('vendor/phpmd/phpmd/src/main/php/PHPMD/AbstractNode.php'));
         $lexer = new Lexer();
-        $lexer->addParser(new MethodParser());
+        $lexer->addParser(
+            new MethodParser(
+                function (array $attributes, $name, Lexer $lexer) {
+                    $a = 1;
+                }
+            )
+        );
         $lexer->process($tokens);
         $a = $lexer->getContent();
     }

@@ -110,15 +110,35 @@ class Lexer
                 $this->checkLevelChange($token);
                 $chunk = $token;
             }
+            $prevStatus = 0;
             foreach ($this->parsers as $parser) {
-                if ($parser->parse($token) === ParserInterface::ABSTAIN) {
+                $parserStatus = $parser->parse($token);
+                if ($parserStatus === ParserInterface::PARSED) {
                     $accepted = false;
-                    $this->content .= $chunk;
+                    $this->content .= $parser;
                     $cachedContent = '';
-                } else {
-                    $accepted = true;
-                    $cachedContent .= $chunk;
+                    continue 2;
+                } elseif ($parserStatus === ParserInterface::ACCEPTED) {
+                    $prevStatus = ParserInterface::ACCEPTED;
+                } elseif ($prevStatus === 0) {
+                    $prevStatus = ParserInterface::ABSTAIN;
                 }
+//                if ($parser->parse($token) === ParserInterface::ABSTAIN) {
+//                    $accepted = false;
+//                    $this->content .= $chunk;
+//                    $cachedContent = '';
+//                } else {
+//                    $accepted = true;
+//                    $cachedContent .= $chunk;
+//                }
+            }
+            if ($prevStatus === ParserInterface::ACCEPTED) {
+                $accepted = true;
+                $cachedContent .= $chunk;
+            } elseif ($prevStatus === ParserInterface::ABSTAIN) {
+                $accepted = false;
+                $this->content .= $cachedContent . $chunk;
+                $cachedContent = '';
             }
         }
     }

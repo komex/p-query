@@ -43,13 +43,20 @@ class MethodParser implements ParserInterface
      * @var int
      */
     private $level = 0;
+    /**
+     * @var callable
+     */
+    private $onParsed;
 
     /**
      * MethodParser constructor.
+     *
+     * @param callable $onParsed
      */
-    public function __construct()
+    public function __construct(callable $onParsed = null)
     {
         $this->reset();
+        $this->onParsed = $onParsed;
     }
 
     /**
@@ -88,6 +95,8 @@ class MethodParser implements ParserInterface
         if ($handler !== null) {
             return call_user_func($handler, $token);
         } else {
+            $this->reset();
+
             return self::ABSTAIN;
         }
     }
@@ -187,11 +196,12 @@ class MethodParser implements ParserInterface
             $this->level++;
         } elseif ($token === ')') {
             if ($this->level === 0) {
-                $this->lexer->registerLevelHandlers([$this, 'startContent'], [$this, 'finishContent']);
-                $this->valuesMap = [];
-                $this->tokensMap = [];
-                $this->level = 0;
-                $this->defaultHandler = null;
+                if ($this->onParsed !== null) {
+                    call_user_func($this->onParsed, $this->attributes, $this->name, $this->lexer);
+                }
+                $this->reset();
+
+                return self::PARSED;
             } else {
                 $this->level--;
             }
@@ -201,34 +211,10 @@ class MethodParser implements ParserInterface
     }
 
     /**
-     * Found start content token
-     *
-     * @return int
-     */
-    public function startContent()
-    {
-        return self::ACCEPTED;
-    }
-
-    /**
-     * Found finish content token
-     *
-     * @return int
-     */
-    public function finishContent()
-    {
-        $this->reset();
-
-        return self::ACCEPTED;
-    }
-
-    /**
      * @return string
      */
     public function __toString()
     {
-        $this->reset();
-
         return '';
     }
 }
