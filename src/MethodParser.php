@@ -112,6 +112,7 @@ class MethodParser implements ParserInterface
         );
         $this->tokensMap[T_FUNCTION] = [$this, 'keyWord'];
         $this->valuesMap = [];
+        $this->defaultHandler = null;
         $this->attributes = [];
         $this->name = null;
         $this->level = 0;
@@ -197,11 +198,14 @@ class MethodParser implements ParserInterface
         } elseif ($token === ')') {
             if ($this->level === 0) {
                 if ($this->onParsed !== null) {
-                    call_user_func($this->onParsed, $this->attributes, $this->name, $this->lexer);
+                    $state = call_user_func($this->onParsed, $this->attributes, $this->name, $this->lexer);
+                    if ($state === self::PARSED) {
+                        return $state;
+                    }
                 }
                 $this->reset();
 
-                return self::PARSED;
+                return self::ABSTAIN;
             } else {
                 $this->level--;
             }
@@ -215,6 +219,6 @@ class MethodParser implements ParserInterface
      */
     public function __toString()
     {
-        return '';
+        return '<< function ' . $this->name . ' declaration >>';
     }
 }

@@ -93,16 +93,16 @@ class Lexer
      */
     public function process(array $tokens)
     {
-        $accepted = false;
-        $cachedContent = '';
+        $state = ParserInterface::ABSTAIN;
+        $cache = '';
         foreach ($tokens as $token) {
             if (is_array($token) === true) {
                 $chunk = $token[1];
                 if ($token[0] === T_WHITESPACE) {
-                    if ($accepted === true) {
+                    if ($state === ParserInterface::ABSTAIN) {
                         $this->content .= $chunk;
                     } else {
-                        $cachedContent .= $chunk;
+                        $cache .= $chunk;
                     }
                     continue;
                 }
@@ -110,37 +110,30 @@ class Lexer
                 $this->checkLevelChange($token);
                 $chunk = $token;
             }
-            $prevStatus = 0;
             foreach ($this->parsers as $parser) {
-                $parserStatus = $parser->parse($token);
-                if ($parserStatus === ParserInterface::PARSED) {
-                    $accepted = false;
+                $result = $parser->parse($token);
+                if ($result === ParserInterface::PARSED) {
+                    $cache = '';
                     $this->content .= $parser;
-                    $cachedContent = '';
-                    continue 2;
-                } elseif ($parserStatus === ParserInterface::ACCEPTED) {
-                    $prevStatus = ParserInterface::ACCEPTED;
-                } elseif ($prevStatus === 0) {
-                    $prevStatus = ParserInterface::ABSTAIN;
+                    $state = $result;
+                    break;
+                } elseif ($result === ParserInterface::ACCEPTED || $state === ParserInterface::ACCEPTED) {
+                    $state = $result;
                 }
-//                if ($parser->parse($token) === ParserInterface::ABSTAIN) {
-//                    $accepted = false;
-//                    $this->content .= $chunk;
-//                    $cachedContent = '';
-//                } else {
-//                    $accepted = true;
-//                    $cachedContent .= $chunk;
-//                }
             }
-            if ($prevStatus === ParserInterface::ACCEPTED) {
-                $accepted = true;
-                $cachedContent .= $chunk;
-            } elseif ($prevStatus === ParserInterface::ABSTAIN) {
-                $accepted = false;
-                $this->content .= $cachedContent . $chunk;
-                $cachedContent = '';
+            if ($state === ParserInterface::PARSED) {
+                foreach ($this->parsers as $parser) {
+                    $parser->reset();
+                }
+                $state = ParserInterface::ABSTAIN;
+            } elseif ($state === ParserInterface::ACCEPTED) {
+                $cache .= $chunk;
+            } else {
+                $this->content .= $cache . $chunk;
+                $cache = '';
             }
         }
+        $this->content .= $cache;
     }
 
     /**

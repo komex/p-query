@@ -9,6 +9,7 @@ namespace Perk\Test;
 
 use Perk\Lexer;
 use Perk\MethodParser;
+use Perk\ParserInterface;
 
 /**
  * Class DocumentTest
@@ -26,7 +27,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $lexer->addParser(
             new MethodParser(
                 function (array $attributes, $name, Lexer $lexer) {
-                    $a = 1;
+                    return ParserInterface::ABSTAIN;
                 }
             )
         );
