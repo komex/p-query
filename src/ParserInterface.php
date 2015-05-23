@@ -16,21 +16,13 @@ namespace Komex\Perk;
 interface ParserInterface
 {
     /**
-     * The token is unknown
-     */
-    const UNKNOWN = 0;
-    /**
      * The token is matched
      */
-    const MATCH = 1;
-    /**
-     * Bad sequence
-     */
-    const RESET = 2;
+    const MATCH = 0;
     /**
      * The sequence is done
      */
-    const DONE = 3;
+    const DONE = 1;
 
     /**
      * @return string
@@ -48,9 +40,7 @@ interface ParserInterface
     public function getValuesMap();
 
     /**
-     * @param callable $handler
-     *
      * @return string
      */
-    public function onMatch(callable $handler = null);
+    public function onMatch();
 }
