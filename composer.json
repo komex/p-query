@@ -18,22 +18,21 @@
     "require": {
         "php": ">=5.4",
         "ext-SPL": "*",
-        "ext-tokenizer": "*",
-        "symfony/event-dispatcher": "2.*"
+        "ext-tokenizer": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.3.1",
-        "squizlabs/php_codesniffer": "1.5.*",
-        "phpmd/phpmd": "@stable"
+        "phpunit/phpunit": "4.6.*",
+        "squizlabs/php_codesniffer": "2.3.*",
+        "phpmd/phpmd": "2.2.*"
     },
     "autoload": {
         "psr-4": {
-            "Perk\\": "src/"
+            "Komex\\Perk\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Perk\\Test\\": "tests/"
+            "Komex\\Test\\Perk\\": "tests/"
         }
     },
     "suggest": {
