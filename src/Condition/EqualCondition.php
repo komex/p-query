@@ -31,14 +31,16 @@ class EqualCondition implements ConditionInterface
     }
 
     /**
-     * Apply token to condition
+     * Check on the conditions of the token
      *
-     * @param int|string $token
+     * @param string|array $token
      *
      * @return int
      */
-    public function apply($token)
+    public function check($token)
     {
+        $token = is_array($token) ? $token[0] : $token;
+
         return $token === $this->token ? self::MATCH : self::MISMATCH;
     }
 }

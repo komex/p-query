@@ -25,11 +25,11 @@ interface ConditionInterface
     const MISMATCH = 2;
 
     /**
-     * Apply token to condition
+     * Check on the conditions of the token
      *
-     * @param int|string $token
+     * @param string|array $token
      *
      * @return int
      */
-    public function apply($token);
+    public function check($token);
 }

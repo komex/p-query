@@ -23,7 +23,7 @@ class EqualConditionTest extends \PHPUnit_Framework_TestCase
     public function testMatch()
     {
         $condition = new EqualCondition(T_CLASS);
-        $this->assertSame(EqualCondition::MATCH, $condition->apply(T_CLASS));
+        $this->assertSame(EqualCondition::MATCH, $condition->check(T_CLASS));
     }
 
     /**
@@ -32,6 +32,6 @@ class EqualConditionTest extends \PHPUnit_Framework_TestCase
     public function testMismatch()
     {
         $condition = new EqualCondition(T_CLASS);
-        $this->assertSame(EqualCondition::MISMATCH, $condition->apply(T_ARRAY));
+        $this->assertSame(EqualCondition::MISMATCH, $condition->check(T_ARRAY));
     }
 }
