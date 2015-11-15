@@ -25,6 +25,8 @@ interface ConditionInterface
     const MISMATCH = 2;
 
     /**
+     * Apply token to condition
+     *
      * @param int|string $token
      *
      * @return int

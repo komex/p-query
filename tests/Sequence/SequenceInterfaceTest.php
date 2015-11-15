@@ -5,7 +5,7 @@
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace Komex\Test\Perk;
+namespace Komex\Test\Perk\Sequence;
 
 use Komex\Perk\Condition\ConditionInterface;
 use Komex\Perk\Sequence\SequenceInterface;

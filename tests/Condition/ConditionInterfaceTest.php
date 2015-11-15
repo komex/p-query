@@ -5,7 +5,7 @@
  * (c) Andrey Kolchenko <andrey@kolchenko.me>
  */
 
-namespace Komex\Test\Perk;
+namespace Komex\Test\Perk\Condition;
 
 use Komex\Perk\Condition\ConditionInterface;
 
